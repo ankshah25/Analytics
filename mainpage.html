@@ -3,81 +3,181 @@
    <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1.0">
-      <script type="text/javascript" src="http://d3js.org/d3.v2.min.js"></script>
+      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
       <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
       <title>Scalaytics</title>
-      <link href ="css/bootstrap.min.css" rel="stylesheet">
+<!--       <link href ="css/bootstrap.min.css" rel="stylesheet"> -->
        <link href ="css/styles.css" rel="stylesheet"> 
+          <!-- Include Required Prerequisites -->
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+           
+          <!-- Include Date Range Picker -->
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
+          <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.min.js"></script>
+          <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.css" /> -->
    </head>
    <body>
-      <nav class="navbar navbar-default" role="navigation" >
-           <div class="container-fluid">
+    <nav class="navbar navbar-fixed-top" role="navigation" >
+         <div class="navbar navbar-default">
+          <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
               <div class="navbar-header">
+
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
                   <a class="navbar-brand" href="#">
                     <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
                     SCALYTICS
                   </a>
               </div>    
+
+                  <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                   <li><a href="home.html">Home</a></li>
+                  <li><a href="mainpage.html">Analytics</a></li>
+                  <li><a href="home.html">About</a></li>
+                  <li><a href="home.html">Contact</a></li>
                 </ul>
-              
+             </div> <!-- /.navbar-collapse -->
+
+
             </div> <!-- /.container-fluid -->
-       </nav>
-    <div class="container-fluid" class="no-margin" class="no-padding">
-      <div class="col-xs-6 col-md-3">
-          <div class="panel panel-default">
+        </div> <!-- /.navbar-default -->
+    </nav>
+
+    <div class="container-fluid">
+
+      <div class="col-xs-2 col-md-2" id="navigation">
+         <div class="navbar-fixed-left" >
+           <div class="panel panel-default">
               <div class="panel-body">
                      <ul class="nav nav-tabs nav-stacked">
-      <!--                 <li>
-                        <a class="navbar-brand" href="#">
-                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
-                        SCALYTICS
-                         </a>
-                      </li> -->
-        <!--             </br></br> -->
-                      <li><a href="mainpage.html" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
-                      <br/>
-                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button">
-                        <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Device
-                        </a>
-                      </li>
-                      <br/>
-                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-random" aria-hidden="true"></span> Events</a></li>
-                      <br/>
-                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Retention</a></li>
-                      <br/>
-                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Crash Reports</a></li>
-                      <br/>
+                        <li><a href="mainpage.html" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
+                        <br/>
+                        <li><a href="device.html" class="btn btn-default btn-lg active" role="button">
+                          <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Device
+                          </a>
+                        </li>
+                        <br/>
+                        <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-random" aria-hidden="true"></span> Events</a></li>
+                        <br/>
+                        <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Retention</a></li>
+                        <br/>
+                        <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Crash Reports</a></li>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                     </ul>
               </div><!-- panel-body -->
-          </div><!-- panel-default -->
-      </div><!-- col-xs-6 col-md-3 -->
-      <div class="col-xs-6 col-md-9" ng-controller="PowerGaugeCtrl">
-               
-     <!--        <div class="panel panel-default"> -->
-            <!--    <div class="panel-body"> -->
-                <div class="col-xs-12 col-md-6">
-                  <div id="power-gauge"></div>
-                </div>
-                <div class="col-xs-6 col-md-6">
-                    Total number of current online users:<input ng-model="totnumofusers" type="text"/>
-                </div>
-           <!--     </div> -->
-            <!-- </div> -->
-                   <div class="col-xs-12 col-md-12" id="dualchartsession">
-                      
-                   </div>
+            </div><!-- panel-default -->
+         </div> <!-- navbar-fixed-left -->
+      </div><!-- col-xs-3 col-md-3 -->
 
+
+      <div class="col-xs-10 col-md-10" style="margin-left:170px">
+           </br></br></br>
+          <div class="container-fluid" class="no-margin" class="no-padding">
+                <div class="col-xs-12 col-md-12" id="rounded-corners" ng-controller="PowerGaugeCtrl">                   
+                        <div id="power-gauge">
+                          
+                        </div>
+
+                         <p> Total number of current online users:<b>{{totnumofusers}}</b></p>                   
+                </div>
+
+             <!--Calendar Start -->
+<!--              <div class="container">
+                <div class="row">
+                    <div class='col-sm-6'>
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker1').datetimepicker();
+                        });
+                    </script>
+                </div>
+             </div> -->
+             <!--Calendar End -->
+          <!--    // Button element the date range picker is applied to -->
+
+             <div ng-controller="DualChartSessionandTimeCtrl" class="col-xs-12 col-md-12" id="dualChartSessionandTime" >
+                       <div id="reportrange" class="pull-left" style="background: #fff;padding: 5px 10px;cursor: pointer; width: 40%">
+                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                           <span></span>
+                       </div>
+                      <div id="dualchartsession">
+                      </div>
+                      <div id="dualcharttime">
+                      </div>
+             </div>
+          </div>
       </div><!-- col-xs-6 col-md-9 -->
 
   </div>
-        <script src="js/powergauge.js"></script>
-        <script src="js/dualchartsession.js"></script>
-        <script src="js/jquery.js"></script>
+
+      <!-- App libs -->
+    <script src="app/app.js"></script>
+    <script src="app/controllers/controllers.js"></script>
+    <script src="app/services/analyticsService.js"></script>
+   <script type="text/javascript">
+      $(function() {
+
+          function cb(start, end, freq) {
+              $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+              var scope = angular.element(
+                    document.
+                    getElementById("dualChartSessionandTime")).
+                    scope();
+              scope.$apply(function () {
+                  scope.setDates(start,end,freq);
+              });
+              scope.$apply(function () {
+                  scope.updatesessionchart();
+              });
+              scope.$apply(function () {
+                  scope.updatetimechart();
+              });
+          }
+          cb(moment().subtract(29, 'days'), moment(),"Last 30 Days");
+
+          $('#reportrange').daterangepicker({
+              ranges: {
+                 "Last 30 Days": [moment().subtract(29, 'days'), moment()],
+                 "Last 7 Days": [moment().subtract(6, 'days'), moment()],
+                 "Last 365 Days": [moment().subtract(365, 'days'), moment()],
+                 "Today": [moment(), moment()],
+                 "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                 "This Month": [moment().startOf('month'), moment().endOf('month')],
+                 "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              }
+          }, cb);
+
+      });
+  </script>
+
+<!--         // <script src="js/powergauge.js"></script> -->
+ <!--        // <script src="js/dualchartsession.js"></script> -->
+<!--         // <script src="js/jquery.js"></script> -->
         <script src="js/bootstrap.min.js"></script>
+        <script src="js/d3tip.js"></script>
+
+        
+
    </body>
 
 </html>

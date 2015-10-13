@@ -69,9 +69,54 @@
 	shape-rendering: crispEdges;
 }
 
-/*path { 
-	fill: none;
-	stroke: steelblue;
-	stroke-width: 2;
-	
-}*/
+.y.axisLeft  line {
+  stroke: lightgrey;
+}
+
+
+.y.axisRight  line {
+  stroke: lightgrey;
+  stroke-dasharray: 2,2;
+}
+
+
+.data-point1 {
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.data-point2 {
+    fill: white;
+    stroke: red;
+    stroke-width: 1.5px;
+}
+
+.navbar-fixed-left {
+  top:50px;
+  position: fixed;
+  left: 0;
+  z-index: 1030;
+  border-width: 0 0 1px;
+}
+@media (min-width: 768px) {
+  .navbar-static-left {
+    border-radius: 0;
+  }
+}
+
+#rounded-corners {
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px; 
+    width: 1000px;
+    height: 200px;    
+}
+
+#dualChartSessionandTime {
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px; 
+    width: 1000px;
+    height: 700px;    
+}

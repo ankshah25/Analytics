@@ -1,0 +1,115 @@
+<!doctype html>
+<html ng-app="nameApp">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1.0">
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<!--       // <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script> -->
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+      <title>Scalaytics</title>
+<!--       <link href ="css/bootstrap.min.css" rel="stylesheet"> -->
+       <link href ="css/styles.css" rel="stylesheet"> 
+          <!-- Include Required Prerequisites -->
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+           
+          <!-- Include Date Range Picker -->
+          <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+   </head>
+   <body>
+      <nav class="navbar navbar-default" role="navigation" >
+           <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <a class="navbar-brand" href="#">
+                    <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                    SCALYTICS
+                  </a>
+              </div>    
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="home.html">Home</a></li>
+                </ul>
+              
+            </div> <!-- /.container-fluid -->
+       </nav>
+    <div class="container-fluid" class="no-margin" class="no-padding">
+      <div class="col-xs-9 col-md-3" overflow="hidden">
+          <div class="panel panel-default">
+              <div class="panel-body">
+                     <ul class="nav nav-tabs nav-stacked">
+      <!--                 <li>
+                        <a class="navbar-brand" href="#">
+                        <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                        SCALYTICS
+                         </a>
+                      </li> -->
+        <!--             </br></br> -->
+                      <li><a href="mainpage.html" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
+                      <br/>
+                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button">
+                        <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Device
+                        </a>
+                      </li>
+                      <br/>
+                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-random" aria-hidden="true"></span> Events</a></li>
+                      <br/>
+                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Retention</a></li>
+                      <br/>
+                      <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Crash Reports</a></li>
+                      <br/>
+                    </ul>
+              </div><!-- panel-body -->
+          </div><!-- panel-default -->
+      </div><!-- col-xs-6 col-md-3 -->
+      <div class="col-xs-3 col-md-9">
+               
+              <div ng-controller="DevicePieChartCtrl">
+                <div class="col-xs-6 col-md-6">
+                  <div id="devicePieChart">
+
+                  </div>
+
+                   
+                </div>
+              </div>
+
+             <!--Calendar Start -->
+
+
+<!--              <div ng-controller="DeviceChartSessionCtrl" class="col-xs-12 col-md-12" >
+                       <div id="reportrange" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 40%">
+                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                           <span></span> <b class="caret"></b>
+                       </div>
+                       <select ng-model="selectedfrequency" name="frequency" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc" ng-change="updatechart()">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="hourly">Hourly</option>
+                      </select>
+                      <div id="dualchartsession">
+                      </div>
+             </div> -->
+
+      </div><!-- col-xs-6 col-md-9 -->
+
+  </div>
+
+      <!-- App libs -->
+    <script src="app/app.js"></script>
+    <script src="app/controllers/controllers.js"></script>
+    <script src="app/services/analyticsService.js"></script>
+
+
+<!--         // <script src="js/powergauge.js"></script> -->
+ <!--        // <script src="js/dualchartsession.js"></script> -->
+<!--         // <script src="js/jquery.js"></script> -->
+        <script src="js/bootstrap.min.js"></script>
+
+        
+
+   </body>
+
+</html>
