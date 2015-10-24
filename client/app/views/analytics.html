@@ -1,0 +1,26 @@
+
+      <div class="col-xs-10 col-md-10" style="margin-left:170px">
+           </br></br></br>
+          <div class="container-fluid" class="no-margin" class="no-padding">
+                <div ng-controller="PowerGaugeCtrl" class="col-xs-12 col-md-12" id="rounded-corners">                   
+                        <div id="power-gauge">
+                          
+                        </div>
+
+                         <p> Total number of current online users:<b>{{totnumofusers}}</b></p>                   
+                </div>
+
+
+             <div ng-controller="DualChartSessionandTimeCtrl" class="col-xs-12 col-md-12" id="dualChartSessionandTime" data-ng-init="init()">
+                       <div id="reportrange" class="pull-left" style="background: #fff;padding: 5px 10px;cursor: pointer; width: 40%">
+                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                           <span></span>
+                       </div>
+                      <div id="dualchartsession">
+                      </div>
+                      <div id="dualcharttime">
+                      </div>
+             </div>
+          </div>
+      </div><!-- col-xs-10 col-md-10 -->
+

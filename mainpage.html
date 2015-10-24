@@ -3,22 +3,40 @@
    <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1.0">
-      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-      <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
-      <title>Scalaytics</title>
+      <script type="text/javascript" src="js/d3.v3.min.js"></script>
+      <script type="text/javascript" src="js/d3.geo.min.js"></script>
+      <script type="text/javascript" src="js/angular.min.js"></script>
+      <script type="text/javascript" src="js/angular-route.min.js"></script>
+      <script type="text/javascript" src="js/jquery.min.js"></script>
+      <script type="text/javascript" src="js/moment.min.js"></script>
+      <script type="text/javascript" src="js/daterangepicker.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/d3tip.js"></script>
+
+      <link href ="css/styles.css" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+      <link rel="stylesheet" type="text/css" href="css/daterangepicker.css" />
+
+<!--       // <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script> -->
+<!--       // <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script> -->
+<!--       // <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular-route.min.js"></script> -->
+<!--       // <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js"></script> -->
+<!--       // <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular-route.js"></script> -->
+
+
 <!--       <link href ="css/bootstrap.min.css" rel="stylesheet"> -->
-       <link href ="css/styles.css" rel="stylesheet"> 
-          <!-- Include Required Prerequisites -->
-          <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
-          <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+<!--          <link href ="css/styles.css" rel="stylesheet">  -->
+<!--           // <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1/jquery.min.js"></script> -->
+<!--           // <script type="text/javascript" src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script> -->
+<!--           <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" /> -->
            
           <!-- Include Date Range Picker -->
-          <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-          <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<!--           // <script type="text/javascript" src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script> -->
+<!--           <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" /> -->
 
           <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.min.js"></script>
           <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tipsy/1.0.2/jquery.tipsy.css" /> -->
+      <title>Scalaytics</title>
    </head>
    <body>
     <nav class="navbar navbar-fixed-top" role="navigation" >
@@ -61,10 +79,15 @@
            <div class="panel panel-default">
               <div class="panel-body">
                      <ul class="nav nav-tabs nav-stacked">
-                        <li><a href="mainpage.html" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
+                        <li><a href="#/" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
                         <br/>
-                        <li><a href="device.html" class="btn btn-default btn-lg active" role="button">
+                        <li><a href="#/device" class="btn btn-default btn-lg active" role="button">
                           <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Device
+                          </a>
+                        </li>
+                        <br/>
+                        <li><a href="#/cities" class="btn btn-default btn-lg active" role="button">
+                          <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Cities
                           </a>
                         </li>
                         <br/>
@@ -80,103 +103,20 @@
          </div> <!-- navbar-fixed-left -->
       </div><!-- col-xs-3 col-md-3 -->
 
-
-      <div class="col-xs-10 col-md-10" style="margin-left:170px">
-           </br></br></br>
-          <div class="container-fluid" class="no-margin" class="no-padding">
-                <div class="col-xs-12 col-md-12" id="rounded-corners" ng-controller="PowerGaugeCtrl">                   
-                        <div id="power-gauge">
-                          
-                        </div>
-
-                         <p> Total number of current online users:<b>{{totnumofusers}}</b></p>                   
-                </div>
-
-             <!--Calendar Start -->
-<!--              <div class="container">
-                <div class="row">
-                    <div class='col-sm-6'>
-                        <div class="form-group">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker1').datetimepicker();
-                        });
-                    </script>
-                </div>
-             </div> -->
-             <!--Calendar End -->
-          <!--    // Button element the date range picker is applied to -->
-
-             <div ng-controller="DualChartSessionandTimeCtrl" class="col-xs-12 col-md-12" id="dualChartSessionandTime" >
-                       <div id="reportrange" class="pull-left" style="background: #fff;padding: 5px 10px;cursor: pointer; width: 40%">
-                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                           <span></span>
-                       </div>
-                      <div id="dualchartsession">
-                      </div>
-                      <div id="dualcharttime">
-                      </div>
-             </div>
-          </div>
-      </div><!-- col-xs-6 col-md-9 -->
+      <div class="container">
+              <div ng-view>
+              </div>
+        </div>
 
   </div>
 
       <!-- App libs -->
     <script src="app/app.js"></script>
-    <script src="app/controllers/controllers.js"></script>
+    <script src="app/controllers/PowerGaugeController.js"></script>
+    <script src="app/controllers/DualSessionandTimeController.js"></script>
+    <script src="app/controllers/DevicePieChartsController.js"></script>
+    <script src="app/controllers/CountryMapController.js"></script>
     <script src="app/services/analyticsService.js"></script>
-   <script type="text/javascript">
-      $(function() {
-
-          function cb(start, end, freq) {
-              $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-              var scope = angular.element(
-                    document.
-                    getElementById("dualChartSessionandTime")).
-                    scope();
-              scope.$apply(function () {
-                  scope.setDates(start,end,freq);
-              });
-              scope.$apply(function () {
-                  scope.updatesessionchart();
-              });
-              scope.$apply(function () {
-                  scope.updatetimechart();
-              });
-          }
-          cb(moment().subtract(29, 'days'), moment(),"Last 30 Days");
-
-          $('#reportrange').daterangepicker({
-              ranges: {
-                 "Last 30 Days": [moment().subtract(29, 'days'), moment()],
-                 "Last 7 Days": [moment().subtract(6, 'days'), moment()],
-                 "Last 365 Days": [moment().subtract(365, 'days'), moment()],
-                 "Today": [moment(), moment()],
-                 "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                 "This Month": [moment().startOf('month'), moment().endOf('month')],
-                 "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-              }
-          }, cb);
-
-      });
-  </script>
-
-<!--         // <script src="js/powergauge.js"></script> -->
- <!--        // <script src="js/dualchartsession.js"></script> -->
-<!--         // <script src="js/jquery.js"></script> -->
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/d3tip.js"></script>
-
-        
 
    </body>
 
