@@ -108,8 +108,8 @@
 #rounded-corners {
     border-radius: 25px;
     border: 2px solid #8AC007;
-    padding: 20px; 
-    width: 1000px;
+    padding: 10px; 
+    width: 1025px;
     height: 200px;    
 }
 
@@ -117,14 +117,29 @@
     border-radius: 25px;
     border: 2px solid #8AC007;
     padding: 20px; 
-    width: 1000px;
-    height: 700px;    
+    width: 1025px;
+    height: 1000px;    
 }
 
 #devicepiecharts {
     border-radius: 25px;
     border: 2px solid #8AC007;
     padding: 20px; 
-    width: 1000px;
+    width: 1025px;
     height: 1200px;    
+}
+
+.bar1 {
+  fill: steelblue;
+}
+
+.bar2 {
+  fill: orange;
+}
+
+.bar1:hover {
+  fill: orangered ;
+}
+.bar2:hover {
+  fill: orangered ;
 }

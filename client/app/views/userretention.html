@@ -1,0 +1,53 @@
+<style>
+/*table {
+    border: 1px solid black;
+}*/
+
+.headercolumn{
+/*  bgcolor:lightgrey;*/
+   border: 1px solid black;
+   background:lightgrey;
+}
+
+.category71to100
+{
+  background:#88A6FF;
+}
+.category41to70
+{
+  background:#C6D4FF;
+}
+.category0to40
+{
+  background:#E5ECFF;
+}
+.categorynone
+{
+  background:#FFFFFF;
+}
+/*.firstcolumn{
+  bgcolor:lightgrey;
+   border: 1px solid red;
+}*/
+
+</style>
+
+      <div class="col-xs-10 col-md-10" style="margin-left:170px">
+           </br></br></br>
+          <div class="container-fluid" class="no-margin" class="no-padding">
+
+             <div ng-controller="UserRetentionChartCtrl" class="col-xs-12 col-md-12" id="userRetentioncharts" data-ng-init="init()">
+                       <div id="reportrange" class="pull-left" style="background: #fff;padding: 5px 10px;cursor: pointer; width: 100%">
+                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                           <span></span>
+                       </div>
+                       <br/><br/>
+                       <h3> User Retention </h3>
+                      <table id="userRetentionchart">
+                        
+                      </table>
+                       
+             </div>
+          </div>
+      </div>
+

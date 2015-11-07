@@ -20,6 +20,11 @@ app.get('/analytics/cities', function (req, res) {
   // res.send('Hello World!');
   res.sendFile(__dirname + '/mainpage.html');
 });
+
+app.get('/analytics/retention', function (req, res) {
+  // res.send('Hello World!');
+  res.sendFile(__dirname + '/mainpage.html');
+});
 // app.get('/analytics', function (req, res) {
 //   // res.send('Hello World!');
 //   res.sendFile(__dirname + '/mainpage.html');

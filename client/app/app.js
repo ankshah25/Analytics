@@ -43,6 +43,12 @@ nameApp.config(function ($routeProvider) {
             templateUrl: '/app/views/countrymap.html'
             
         })
+        .when('/userretention',
+        {
+            //controller: 'DashboardPageCtrl',
+            templateUrl: '/app/views/userretention.html'
+            
+        })
         // .when('/analytics/device',
         // {
         //     //controller: 'DashboardPageCtrl',
