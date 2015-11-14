@@ -7,6 +7,7 @@
       <script type="text/javascript" src="js/d3.geo.min.js"></script>
       <script type="text/javascript" src="js/angular.min.js"></script>
       <script type="text/javascript" src="js/angular-route.min.js"></script>
+       <script type="text/javascript" src="js/angular-resource.min.js"></script>
       <script type="text/javascript" src="js/jquery.min.js"></script>
       <script type="text/javascript" src="js/moment.min.js"></script>
       <script type="text/javascript" src="js/daterangepicker.js"></script>
@@ -80,21 +81,21 @@
               <div class="panel-body">
                      <ul class="nav nav-tabs nav-stacked">
                         <li><a href="#/" class="btn-default btn btn-lg active" role="button"><span class="glyphicon glyphicon-stats" aria-hidden="true"> Dashboard</a></li>
-                        <br/>
+                     <!--    <br/> -->
                         <li><a href="#/device" class="btn btn-default btn-lg active" role="button">
                           <span class="glyphicon glyphicon-phone" aria-hidden="true"></span> Device
                           </a>
                         </li>
-                        <br/>
+                    <!--     <br/> -->
                         <li><a href="#/cities" class="btn btn-default btn-lg active" role="button">
                           <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Cities
                           </a>
                         </li>
-                        <br/>
+                    <!--     <br/> -->
                         <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-random" aria-hidden="true"></span> Events</a></li>
-                        <br/>
+                   <!--      <br/> -->
                         <li><a href="#/userretention" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Retention</a></li>
-                        <br/>
+                      <!--   <br/> -->
                         <li><a href="mainpage.html" class="btn btn-default btn-lg active" role="button"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Crash Reports</a></li>
                         <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                     </ul>
@@ -112,7 +113,8 @@
 
       <!-- App libs -->
     <script src="app/app.js"></script>
-    <script src="app/controllers/PowerGaugeController.js"></script>
+<!--     // <script src="app/controllers/PowerGaugeController.js"></script> -->
+    <script src="app/controllers/TickerChartController.js"></script>
     <script src="app/controllers/DualSessionandTimeController.js"></script>
     <script src="app/controllers/DevicePieChartsController.js"></script>
     <script src="app/controllers/CountryMapController.js"></script>

@@ -20,7 +20,7 @@
   #######################################################################*/
 
 //var app = angular.module('customersApp', ['ngRoute']);
-var nameApp = angular.module('nameApp', ['ngRoute']);
+var nameApp = angular.module('nameApp', ['ngRoute','ngResource']);
 
 //This configures the routes and associates each route with a view and a controller
 nameApp.config(function ($routeProvider) {

@@ -1,34 +1,86 @@
-nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','analyticsService',function ($scope,analyticsService){
+nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','$http','analyticsService',function ($scope,$http,analyticsService){
 
 
     $(function() {
           $('#reportrange').daterangepicker({
-              ranges: {
-                "Last 365 Days": [moment().subtract(365, 'days'), moment()],
-                 "Last 30 Days": [moment().subtract(29, 'days'), moment()],
-                 "Last 7 Days": [moment().subtract(6, 'days'), moment()],                
-                 "Today": [moment(), moment()],
-                 "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                 "This Month": [moment().startOf('month'), moment().endOf('month')],
-                 "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-              }
+            minDate: moment().subtract(365, 'days'),
+            maxDate: moment(),
+              // ranges: {
+              //   "Last 365 Days": [moment().subtract(365, 'days'), moment()],
+              //    "Last 30 Days": [moment().subtract(29, 'days'), moment()],
+              //    "Last 7 Days": [moment().subtract(6, 'days'), moment()],                
+              //    "Today": [moment(), moment()],
+              //    "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+              //    "This Month": [moment().startOf('month'), moment().endOf('month')],
+              //    "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              // }
           }, cb);
+          
+            $("#btntoday").click(function(){
+             cb(moment().startOf('day'), moment().endOf('day'),"Hour");
+            });
 
-          cb(moment().subtract(365, 'days'), moment(),"Last 365 Days");
+            $("#btnyesterday").click(function(){
+             cb(moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day'),"Hour");
+            });
+
+            $("#btncurrmonth").click(function(){
+             cb(moment().startOf('month').startOf('day'), moment().endOf('day'),"Day");
+            });
+
+            $("#btnprevmonth").click(function(){
+             cb(moment().subtract(1, 'month').startOf('month').startOf('day'), moment().subtract(1, 'month').endOf('month').endOf('day'),"Day");
+            });
+
+            $("#btn3mnths").click(function(){
+             cb(moment().subtract(3, 'month').startOf('day'), moment().endOf('day'),"Week");
+            });
+                                    
+            $("#btn6mnths").click(function(){
+             cb(moment().subtract(6, 'month').startOf('day'), moment().endOf('day'),"Week");
+            });
+
+            $("#btn1year").click(function(){
+             cb(moment().subtract(1, 'year').startOf('day'), moment().endOf('day'),"Month");
+            });
+
+          cb(moment().startOf('day'), moment().endOf('day'),"Hour");
 
           function cb(start, end, freq) {
 
-              $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-              $scope.startdate=start;
-              $scope.enddate=end;
+            if(freq==undefined)
+            {
+               var diff = end.diff(start,'days');
+               if(diff<=2)
+               {
+                 freq = "Hour";
+               }
+               else if(diff<=31)
+               {
+                freq = "Day";
+               }
+               else if(diff<=180)
+               {
+                freq = "Week";
+               }
+               else
+               {
+                freq = "Month";
+               }
+
+            }
+              $('#reportrange span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+              $scope.startdate=moment(start).valueOf();
+              $scope.enddate=moment(end).valueOf();
               $scope.selectedfrequency=freq;
+
 
               if(!$scope.$$phase) {
                 $scope.$apply(function() {
                   
-                    $scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-                    //$scope.updatesessionchart();
-                    //$scope.updatetimechart();
+                    //$scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+                    $scope.updatesessionchart();
+                    $scope.updatetimechart();
                     $scope.updateuserchart();
                 });
               }
@@ -38,9 +90,6 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','analyticsService',f
       });
 
 
-    //$scope.selectedfrequency ="Last 30 Days";
-    // $scope.startdate="";
-    // $scope.enddate="";
     $scope.alreadysessionloaded=false;
      $scope.alreadytimeloaded=false;
      $scope.alreadyuserchartloaded=false;
@@ -50,43 +99,40 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','analyticsService',f
                   if(!$scope.$$phase) {
                       $scope.$apply(function() {
                           
-                          $scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-                          //$scope.updatesessionchart();
-                          //$scope.updatetimechart();
+                          //$scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+                          $scope.updatesessionchart();
+                          $scope.updatetimechart();
                           $scope.updateuserchart();
                       });
                 }
                 else
                 {
-                          $scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-                          //$scope.updatesessionchart();
-                          //$scope.updatetimechart();    
-                           $scope.updateuserchart();           
+                          //$scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+                          $scope.updatesessionchart();
+                          $scope.updatetimechart();    
+                          $scope.updateuserchart();           
 
                 }
     };
 
-    $scope.setDates = function(start,end,freq){
-            $scope.startdate=start;
-            $scope.enddate=end;
-            $scope.selectedfrequency=freq;
+    // $scope.setDates = function(start,end,freq){
+    //         $scope.startdate=start;
+    //         $scope.enddate=end;
+    //         $scope.selectedfrequency=freq;
  
-    };
+    // };
 
     $scope.updatesessionchart = function(){
 
 //Get the data
 
-data = analyticsService.getUserSessionData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+data = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.selectedfrequency);
 
 
   var margin = {top: 30, right: 40, bottom: 30, left: 50},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
-  var parseDate = d3.time.format("%d-%b-%Y %H:%M").parse;
-
-  var parseYear = d3.time.format("%b-%Y").parse;
-
+  var parseDate;
 
   var x = d3.time.scale().range([0, width]);
   var y0 = d3.scale.linear().range([height, 0]);
@@ -104,25 +150,34 @@ data = analyticsService.getUserSessionData($scope.startdate,$scope.enddate,$scop
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
 
-if(($scope.selectedfrequency == "Last 7 Days") 
-     || ($scope.selectedfrequency == "Last 30 Days")
-     || ($scope.selectedfrequency == "This Month")
-     || ($scope.selectedfrequency == "Last Month"))
-{
-      xAxis.ticks(d3.time.days, 1)
-      .tickFormat(d3.time.format("%d %b"));
-}
+  if($scope.selectedfrequency == "Day")
+  {
+        xAxis.ticks(d3.time.days, 1)
+        .tickFormat(d3.time.format("%d %b"));
 
-if(($scope.selectedfrequency == "Today") || ($scope.selectedfrequency == "Yesterday"))
-{
-      xAxis.ticks(d3.time.hours, 1)
-      .tickFormat(d3.time.format("%H:%M"));
-}
-if($scope.selectedfrequency == "Last 365 Days")
-{
-      xAxis.ticks(d3.time.months, 1)
-      .tickFormat(d3.time.format("%b"));
-}
+        parseDate = d3.time.format("%Y%m%d").parse;
+  }
+  if($scope.selectedfrequency == "Week")
+  {
+        xAxis.ticks(d3.time.weeks, 1)
+        .tickFormat(d3.time.format("%d %b"));
+
+        parseDate = d3.time.format("%Y%m%d").parse;
+  }
+  if(($scope.selectedfrequency=="Hour"))
+  {
+        xAxis.ticks(d3.time.hours, 1)
+        .tickFormat(d3.time.format("%H:%M"));
+
+        parseDate = d3.time.format("%Y%m%d%H").parse;
+  }
+  if($scope.selectedfrequency=="Month")
+  {
+        xAxis.ticks(d3.time.months, 1)
+        .tickFormat(d3.time.format("%b %y"));
+
+        parseDate = d3.time.format("%Y%m").parse;
+  }
 
   var yAxisLeft = d3.svg.axis().scale(y0)
       .orient("left").ticks(5)
@@ -134,23 +189,13 @@ if($scope.selectedfrequency == "Last 365 Days")
       .innerTickSize(-width)
       .outerTickSize(0); 
 
-//drawline(data);
-if($scope.selectedfrequency == "Last 365 Days")
-{
-  data.forEach(function(d) {
-      d.date = parseYear(d.date);
-      d.totnumberofsessions = +d.totnumberofsessions;
-      d.avgnumberofsessions = +d.avgnumberofsessions;
-  });
-}
-else
-{
+
   data.forEach(function(d) {
       d.date = parseDate(d.date);
       d.totnumberofsessions = +d.totnumberofsessions;
       d.avgnumberofsessions = +d.avgnumberofsessions;
   });
-}
+
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -413,16 +458,13 @@ if($scope.alreadysessionloaded==false)
 
 //Get the data
 
-data = analyticsService.getUserTimeSpentData($scope.startdate,$scope.enddate,$scope.selectedfrequency );
+data = analyticsService.getSessionDuration($scope.startdate,$scope.enddate,$scope.selectedfrequency );
 
 
   var margin = {top: 30, right: 40, bottom: 30, left: 50},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
-  var parseDate = d3.time.format("%d-%b-%Y %H:%M").parse;
-
-  var parseYear = d3.time.format("%b-%Y").parse;
-
+  var parseDate;
 
   var x = d3.time.scale().range([0, width]);
   var y0 = d3.scale.linear().range([height, 0]);
@@ -440,24 +482,33 @@ data = analyticsService.getUserTimeSpentData($scope.startdate,$scope.enddate,$sc
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
 
-if(($scope.selectedfrequency == "Last 7 Days") 
-     || ($scope.selectedfrequency == "Last 30 Days")
-     || ($scope.selectedfrequency == "This Month")
-     || ($scope.selectedfrequency == "Last Month"))
+if($scope.selectedfrequency == "Day")
 {
       xAxis.ticks(d3.time.days, 1)
       .tickFormat(d3.time.format("%d %b"));
-}
 
-if(($scope.selectedfrequency == "Today") || ($scope.selectedfrequency == "Yesterday"))
+      parseDate = d3.time.format("%Y%m%d").parse;
+}
+if($scope.selectedfrequency == "Week")
+{
+      xAxis.ticks(d3.time.weeks, 1)
+      .tickFormat(d3.time.format("%d %b"));
+
+      parseDate = d3.time.format("%Y%m%d").parse;
+}
+if(($scope.selectedfrequency=="Hour"))
 {
       xAxis.ticks(d3.time.hours, 1)
       .tickFormat(d3.time.format("%H:%M"));
+
+      parseDate = d3.time.format("%Y%m%d%H").parse;
 }
-if($scope.selectedfrequency == "Last 365 Days")
+if($scope.selectedfrequency=="Month")
 {
       xAxis.ticks(d3.time.months, 1)
-      .tickFormat(d3.time.format("%b"));
+      .tickFormat(d3.time.format("%b %y"));
+
+      parseDate = d3.time.format("%Y%m").parse;
 }
 
   var yAxisLeft = d3.svg.axis().scale(y0)
@@ -470,23 +521,12 @@ if($scope.selectedfrequency == "Last 365 Days")
       .innerTickSize(-width)
       .outerTickSize(0); 
 
-//drawline(data);
-if($scope.selectedfrequency == "Last 365 Days")
-{
-  data.forEach(function(d) {
-      d.date = parseYear(d.date);
-      d.tottimespent = +d.tottimespent;
-      d.avgtimespent = +d.avgtimespent;
-  });
-}
-else
-{
+
   data.forEach(function(d) {
       d.date = parseDate(d.date);
       d.tottimespent = +d.tottimespent;
       d.avgtimespent = +d.avgtimespent;
   });
-}
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -496,8 +536,7 @@ else
       return Math.max(d.avgtimespent); })]); 
 
 
-
- var svg = d3.select("#dualcharttime");
+ //var svg = d3.select("#dualcharttime");
 
    var tip1 = d3.tip()
      .attr('class', 'd3-tip')
@@ -746,58 +785,67 @@ if($scope.alreadytimeloaded==false)
 
   };
 
+
    $scope.updateuserchart = function()
    {
 
 //Get the data
-console.log($scope.selectedfrequency);
-data = analyticsService.getUserCountData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-console.log("function called");
-console.log(data);
+   //getusersplitdata();
+   var myDataPromise = analyticsService.getUserSplit($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+   myDataPromise.then(function(response){
+
+        console.log('success');
+         $scope.UserSplitData = response.data;
+  
+
+  console.log("Root scope:");
+  console.log($scope.UserSplitData);
+  data =  $scope.UserSplitData;
+
   var margin = {top: 30, right: 40, bottom: 30, left: 60},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
-  var parseDate = d3.time.format("%d-%b-%Y %H:%M").parse;
 
-  var parseYear = d3.time.format("%b-%Y").parse;
-
+  var parseDate;
 
   var x = d3.time.scale().range([0, width]);
   //var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
   var y0 = d3.scale.linear().range([height, 0]);
   var y1 = d3.scale.linear().range([height, 0]);
 
-  // var valueline1 = d3.svg.line()
-  //     .x(function(d) { return x(d.date); })
-  //     .y(function(d) { return y0(d.totnumofnewusers); });
-      
-
-  // var valueline2 = d3.svg.line()
-  //     .x(function(d) { return x(d.date); })
-  //     .y(function(d) { return y1(d.totnumofretusers); });
 
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
 
-if(($scope.selectedfrequency == "Last 7 Days") 
-     || ($scope.selectedfrequency == "Last 30 Days")
-     || ($scope.selectedfrequency == "This Month")
-     || ($scope.selectedfrequency == "Last Month"))
+if($scope.selectedfrequency == "Day")
 {
       xAxis.ticks(d3.time.days, 1)
       .tickFormat(d3.time.format("%d %b"));
-}
 
-if(($scope.selectedfrequency == "Today") || ($scope.selectedfrequency == "Yesterday"))
+      parseDate = d3.time.format("%Y%m%d").parse;
+}
+if($scope.selectedfrequency == "Week")
+{
+      xAxis.ticks(d3.time.weeks, 1)
+      .tickFormat(d3.time.format("%d %b"));
+
+      parseDate = d3.time.format("%Y%m%d").parse;
+}
+if(($scope.selectedfrequency=="Hour"))
 {
       xAxis.ticks(d3.time.hours, 1)
       .tickFormat(d3.time.format("%H:%M"));
+
+      parseDate = d3.time.format("%Y%m%d%H").parse;
 }
-if($scope.selectedfrequency == "Last 365 Days")
+if($scope.selectedfrequency=="Month")
 {
       xAxis.ticks(d3.time.months, 1)
-      .tickFormat(d3.time.format("%b"));
+      .tickFormat(d3.time.format("%b %y"));
+
+      parseDate = d3.time.format("%Y%m").parse;
 }
+
 
   var yAxisLeft = d3.svg.axis().scale(y0)
       .orient("left").ticks(5)
@@ -810,29 +858,20 @@ if($scope.selectedfrequency == "Last 365 Days")
       .outerTickSize(0); 
 
 //drawline(data);
-if($scope.selectedfrequency == "Last 365 Days")
-{
+
   data.forEach(function(d) {
-      d.date = parseYear(d.date);
-      d.totnumofnewusers = +d.totnumofnewusers;
-      d.totnumofretusers = +d.totnumofretusers;
-  });
-}
-else
-{
-  data.forEach(function(d) {
-      d.date = parseDate(d.date);
-      d.totnumofnewusers = +d.totnumofnewusers;
-      d.totnumofretusers = +d.totnumofretusers;
-  });
-}
+      d._id = parseDate(d._id);
+      d.New_User_Count = +d.New_User_Count;
+      d.Unique_User_Count = +d.Unique_User_Count;
+      });
+
 
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) { return d._id; }));
   y0.domain([0, d3.max(data, function(d) { 
-      return Math.max(d.totnumofnewusers); })]);  
+      return Math.max(d.New_User_Count); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.totnumofretusers); })]); 
+      return Math.max(d.Unique_User_Count); })]); 
 
 
 
@@ -842,14 +881,14 @@ else
      .attr('class', 'd3-tip')
      .offset([-10, 0])
      .html(function (d) {
-     return "<strong>Total number of new users:</strong> <span style='color:red'>" + d.totnumofnewusers +"</span>";
+     return "<strong>Total number of new users:</strong> <span style='color:red'>" + d.New_User_Count +"</span>";
  })
 
   var tip2 = d3.tip()
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.totnumofretusers +"</span>";
+       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
    })
 
 
@@ -857,8 +896,6 @@ else
 
 if($scope.alreadyuserchartloaded==false)
 {
-    
-    console.log("if called");
 
       svg = d3.select("#dualchartuser")
           .append("svg")
@@ -919,10 +956,10 @@ bars1 = svg.selectAll(".bar1").data(data);
 
 bars1.enter().append("rect")
       .attr("class", "bar1")
-      .attr("x", function(d) { return x(d.date)-10; })
+      .attr("x", function(d) { return x(d._id)-10; })
       .attr("width", 10)
-      .attr("y", function(d) { return y0(d.totnumofnewusers); })
-      .attr("height", function(d,i,j) { return height - y0(d.totnumofnewusers); })
+      .attr("y", function(d) { return y0(d.New_User_Count); })
+      .attr("height", function(d,i,j) { return height - y0(d.New_User_Count); })
       .on('mouseover', tip1.show)
       .on('mouseout', tip1.hide);
 
@@ -930,10 +967,10 @@ bars2 = svg.selectAll(".bar2").data(data);
 
 bars2.enter().append("rect")
       .attr("class", "bar2")
-      .attr("x", function(d) { return x(d.date); })
+      .attr("x", function(d) { return x(d._id); })
       .attr("width", 10)
-      .attr("y", function(d) { return y1(d.totnumofretusers); })
-      .attr("height", function(d,i,j) { return height - y1(d.totnumofretusers); })
+      .attr("y", function(d) { return y1(d.Unique_User_Count); })
+      .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); })
       .on('mouseover', tip2.show)
       .on('mouseout', tip2.hide);
 
@@ -948,23 +985,23 @@ bars2.enter().append("rect")
      .attr('class', 'd3-tip')
      .offset([-10, 0])
      .html(function (d) {
-     return "<strong>Total number of new users:</strong> <span style='color:red'>" + d.totnumofnewusers +"</span>";
+     return "<strong>Total number of new users:</strong> <span style='color:red'>" + d.New_User_Count +"</span>";
  })
 
   var tip2 = d3.tip()
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.totnumofretusers +"</span>";
+       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
    })
 
 
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) { return d._id; }));
   y0.domain([0, d3.max(data, function(d) { 
-      return Math.max(d.totnumofnewusers); })]);  
+      return Math.max(d.New_User_Count); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.totnumofretusers); })]); 
+      return Math.max(d.Unique_User_Count); })]); 
 
        var svg = d3.select("#dualchartuser").transition();
 
@@ -1002,10 +1039,10 @@ bars2.enter().append("rect")
 
         bars1.enter().append("rect")
               .attr("class", "bar1")
-              .attr("x", function(d) { return x(d.date)-10; })
+              .attr("x", function(d) { return x(d._id)-10; })
               .attr("width", 10)
-              .attr("y", function(d) { return y0(d.totnumofnewusers); })
-              .attr("height", function(d,i,j) { return height - y0(d.totnumofnewusers); })
+              .attr("y", function(d) { return y0(d.New_User_Count); })
+              .attr("height", function(d,i,j) { return height - y0(d.New_User_Count); })
               .on('mouseover', tip1.show)
               .on('mouseout', tip1.hide);
 
@@ -1013,10 +1050,10 @@ bars2.enter().append("rect")
 
         bars2.enter().append("rect")
               .attr("class", "bar2")
-              .attr("x", function(d) { return x(d.date); })
+              .attr("x", function(d) { return x(d._id); })
               .attr("width", 10)
-              .attr("y", function(d) { return y1(d.totnumofretusers); })
-              .attr("height", function(d,i,j) { return height - y1(d.totnumofretusers); })
+              .attr("y", function(d) { return y1(d.Unique_User_Count); })
+              .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); })
               .on('mouseover', tip2.show)
               .on('mouseout', tip2.hide);
 
@@ -1037,8 +1074,8 @@ bars2.enter().append("rect")
 //       .attr("class", "bar2")
 //       .attr("x", function(d) { return x(d.date); })
 //       .attr("width", 10)
-//       .attr("y", function(d) { return y1(d.totnumofretusers); })
-//     .attr("height", function(d,i,j) { return height - y1(d.totnumofretusers); }); 
+//       .attr("y", function(d) { return y1(d.Unique_User_Count); })
+//     .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); }); 
    //  // Select the section we want to apply our changes to
    //  var svg = d3.select("#dualcharttime").transition();
 
@@ -1140,6 +1177,7 @@ bars2.enter().append("rect")
    //    .remove();
 
     }
+  });
 
   };
 

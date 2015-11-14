@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var databasecontroller = require('./server/controllers/DatabaseController');
 
 app.get('/', function (req, res) {
   // res.send('Hello World!');
@@ -25,6 +26,8 @@ app.get('/analytics/retention', function (req, res) {
   // res.send('Hello World!');
   res.sendFile(__dirname + '/mainpage.html');
 });
+
+app.get('/usersplit', databasecontroller.usersplit);
 // app.get('/analytics', function (req, res) {
 //   // res.send('Hello World!');
 //   res.sendFile(__dirname + '/mainpage.html');
