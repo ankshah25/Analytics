@@ -44,7 +44,7 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','$http','analyticsSe
              cb(moment().subtract(1, 'year').startOf('day'), moment().endOf('day'),"Month");
             });
 
-          cb(moment().startOf('day'), moment().endOf('day'),"Hour");
+          cb(moment().subtract(3, 'month').startOf('day'), moment().endOf('day'),"Week");
 
           function cb(start, end, freq) {
 
@@ -126,9 +126,10 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','$http','analyticsSe
 
 //Get the data
 
-data = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+   var SessionCountsPromise  = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+   SessionCountsPromise.then(function(response){
 
-
+   data =  response.data;
   var margin = {top: 30, right: 40, bottom: 30, left: 50},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
@@ -139,13 +140,13 @@ data = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.
   var y1 = d3.scale.linear().range([height, 0]);
 
   var valueline1 = d3.svg.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y0(d.totnumberofsessions); });
+      .x(function(d) { return x(d._id); })
+      .y(function(d) { return y0(d.Non_Unique_User_Count); });
       
 
   var valueline2 = d3.svg.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y1(d.avgnumberofsessions); });
+      .x(function(d) { return x(d._id); })
+      .y(function(d) { return y1(d.Unique_User_Count); });
 
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
@@ -191,18 +192,18 @@ data = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.
 
 
   data.forEach(function(d) {
-      d.date = parseDate(d.date);
-      d.totnumberofsessions = +d.totnumberofsessions;
-      d.avgnumberofsessions = +d.avgnumberofsessions;
+      d._id = parseDate(d._id);
+      d.Non_Unique_User_Count = +d.Non_Unique_User_Count;
+      d.Unique_User_Count = +d.Unique_User_Count;
   });
 
 
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) { return d._id; }));
   y0.domain([0, d3.max(data, function(d) { 
-      return Math.max(d.totnumberofsessions); })]);  
+      return Math.max(d.Non_Unique_User_Count); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.avgnumberofsessions); })]); 
+      return Math.max(d.Unique_User_Count); })]); 
 
 
 
@@ -212,14 +213,14 @@ data = analyticsService.getSessionCounts($scope.startdate,$scope.enddate,$scope.
      .attr('class', 'd3-tip')
      .offset([-10, 0])
      .html(function (d) {
-     return "<strong>Total Number of Sessions:</strong> <span style='color:red'>" + d.totnumberofsessions +"</span>";
+     return "<strong>Total Number of Sessions:</strong> <span style='color:red'>" + d.Non_Unique_User_Count +"</span>";
  })
 
   var tip2 = d3.tip()
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.avgnumberofsessions +"</span>";
+       return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
    })
 
 
@@ -302,10 +303,10 @@ if($scope.alreadysessionloaded==false)
 
       bluecircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y0(d.totnumberofsessions);
+             return y0(d.Non_Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip1.show)
@@ -326,10 +327,10 @@ if($scope.alreadysessionloaded==false)
 
       redcircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.avgnumberofsessions);
+             return y1(d.Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip2.show)
@@ -356,14 +357,14 @@ if($scope.alreadysessionloaded==false)
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total Number of Sessions:</strong> <span style='color:red'>" + d.totnumberofsessions +"</span>";
+       return "<strong>Total Number of Sessions:</strong> <span style='color:red'>" + d.Non_Unique_User_Count +"</span>";
    })
 
     var tip4 = d3.tip()
          .attr('class', 'd3-tip')
          .offset([-10, 0])
          .html(function (d) {
-         return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.avgnumberofsessions +"</span>";
+         return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
      })
     
 
@@ -409,10 +410,10 @@ if($scope.alreadysessionloaded==false)
 
       bluecircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y0(d.totnumberofsessions);
+             return y0(d.Non_Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip3.show)
@@ -434,10 +435,10 @@ if($scope.alreadysessionloaded==false)
 
       redcircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.avgnumberofsessions);
+             return y1(d.Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip4.show)
@@ -450,6 +451,7 @@ if($scope.alreadysessionloaded==false)
       .remove();
 
     }
+  });
 
   };
 
@@ -458,9 +460,10 @@ if($scope.alreadysessionloaded==false)
 
 //Get the data
 
-data = analyticsService.getSessionDuration($scope.startdate,$scope.enddate,$scope.selectedfrequency );
+  var SessionDurationPromise = analyticsService.getSessionDuration($scope.startdate,$scope.enddate,$scope.selectedfrequency );
+  SessionDurationPromise.then(function(response){
 
-
+  data = response.data;
   var margin = {top: 30, right: 40, bottom: 30, left: 50},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
@@ -471,13 +474,13 @@ data = analyticsService.getSessionDuration($scope.startdate,$scope.enddate,$scop
   var y1 = d3.scale.linear().range([height, 0]);
 
   var valueline1 = d3.svg.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y0(d.tottimespent); });
+      .x(function(d) { return x(d._id); })
+      .y(function(d) { return y0(d.Total_Time_Spent); });
       
 
   var valueline2 = d3.svg.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y1(d.avgtimespent); });
+      .x(function(d) { return x(d._id); })
+      .y(function(d) { return y1(d.Unique_User_Count); });
 
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
@@ -523,17 +526,17 @@ if($scope.selectedfrequency=="Month")
 
 
   data.forEach(function(d) {
-      d.date = parseDate(d.date);
-      d.tottimespent = +d.tottimespent;
-      d.avgtimespent = +d.avgtimespent;
+      d._id = parseDate(d._id);
+      d.Total_Time_Spent = +d.Total_Time_Spent;
+      d.Unique_User_Count = +d.Unique_User_Count;
   });
 
   // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) { return d._id; }));
   y0.domain([0, d3.max(data, function(d) { 
-      return Math.max(d.tottimespent); })]);  
+      return Math.max(d.Total_Time_Spent); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.avgtimespent); })]); 
+      return Math.max(d.Unique_User_Count); })]); 
 
 
  //var svg = d3.select("#dualcharttime");
@@ -542,14 +545,14 @@ if($scope.selectedfrequency=="Month")
      .attr('class', 'd3-tip')
      .offset([-10, 0])
      .html(function (d) {
-     return "<strong>Total Time Spent:</strong> <span style='color:red'>" + d.tottimespent +"</span>";
+     return "<strong>Total Time Spent:</strong> <span style='color:red'>" + d.Total_Time_Spent +"</span>";
  })
 
   var tip2 = d3.tip()
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.avgtimespent +"</span>";
+       return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
    })
 
 
@@ -634,10 +637,10 @@ if($scope.alreadytimeloaded==false)
 
       bluecircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y0(d.tottimespent);
+             return y0(d.Total_Time_Spent);
          })
       .attr("r", 3)
       .on('mouseover', tip1.show)
@@ -658,10 +661,10 @@ if($scope.alreadytimeloaded==false)
 
       redcircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.avgtimespent);
+             return y1(d.Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip2.show)
@@ -688,14 +691,14 @@ if($scope.alreadytimeloaded==false)
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total Time Spent:</strong> <span style='color:red'>" + d.tottimespent +"</span>";
+       return "<strong>Total Time Spent:</strong> <span style='color:red'>" + d.Total_Time_Spent +"</span>";
    })
 
     var tip4 = d3.tip()
          .attr('class', 'd3-tip')
          .offset([-10, 0])
          .html(function (d) {
-         return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.avgtimespent +"</span>";
+         return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
      })
     
 
@@ -741,10 +744,10 @@ if($scope.alreadytimeloaded==false)
 
       bluecircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y0(d.tottimespent);
+             return y0(d.Total_Time_Spent);
          })
       .attr("r", 3)
       .on('mouseover', tip3.show)
@@ -766,10 +769,10 @@ if($scope.alreadytimeloaded==false)
 
       redcircles
       .attr("cx", function (d, i) {
-             return x(d.date);
+             return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.avgtimespent);
+             return y1(d.Unique_User_Count);
          })
       .attr("r", 3)
       .on('mouseover', tip4.show)
@@ -782,6 +785,7 @@ if($scope.alreadytimeloaded==false)
       .remove();
 
     }
+  });
 
   };
 
@@ -791,16 +795,12 @@ if($scope.alreadytimeloaded==false)
 
 //Get the data
    //getusersplitdata();
-   var myDataPromise = analyticsService.getUserSplit($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-   myDataPromise.then(function(response){
+   var UserSplitPromise = analyticsService.getUserSplit($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+   UserSplitPromise.then(function(response){
 
-        console.log('success');
-         $scope.UserSplitData = response.data;
+  console.log('success');
   
-
-  console.log("Root scope:");
-  console.log($scope.UserSplitData);
-  data =  $scope.UserSplitData;
+  data =  response.data;
 
   var margin = {top: 30, right: 40, bottom: 30, left: 60},
   width = 950 - margin.left - margin.right,
@@ -1059,122 +1059,6 @@ bars2.enter().append("rect")
 
 
 
-// bars1 = svg.selectAll(".bar1").data(data);
-
-// bars1.enter().append("rect")
-//       .attr("class", "bar1")
-//       .attr("x", function(d) { return x(d.date)-10; })
-//       .attr("width", 10)
-//       .attr("y", function(d) { return y0(d.totnumofnewusers); })
-//     .attr("height", function(d,i,j) { return height - y0(d.totnumofnewusers); }); 
-
-// bars2 = svg.selectAll(".bar2").data(data);
-
-// bars2.enter().append("rect")
-//       .attr("class", "bar2")
-//       .attr("x", function(d) { return x(d.date); })
-//       .attr("width", 10)
-//       .attr("y", function(d) { return y1(d.Unique_User_Count); })
-//     .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); }); 
-   //  // Select the section we want to apply our changes to
-   //  var svg = d3.select("#dualcharttime").transition();
-
-   //    var tip3 = d3.tip()
-   //     .attr('class', 'd3-tip')
-   //     .offset([-10, 0])
-   //     .html(function (d) {
-   //     return "<strong>Total Time Spent:</strong> <span style='color:red'>" + d.tottimespent +"</span>";
-   // })
-
-   //  var tip4 = d3.tip()
-   //       .attr('class', 'd3-tip')
-   //       .offset([-10, 0])
-   //       .html(function (d) {
-   //       return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.avgtimespent +"</span>";
-   //   })
-    
-
-   //  //svg.call(tip);
-   //  // Make the changes
-   //      svg.select(".line1")   // change the line
-   //          .duration(750)
-   //          .attr("d", valueline1(data));
-   //      svg.select(".line2")   // change the line
-   //          .duration(750)
-   //          .attr("d", valueline2(data));
-   //      var xAxisOrig = svg.select(".x.axis") // change the x axis
-   //                      .duration(750)
-   //                      .call(xAxis);
-
-   //      xAxisOrig.selectAll("text")  // select all the text elements for the xaxis
-   //          .style("text-anchor", "end")
-   //          .attr("dx", "-.8em")
-   //          .attr("dy", ".15em")
-   //          .attr("transform", function(d) {
-   //              return "rotate(-90)";
-   //        });
-
-
-   //      svg.select(".y.axis.axisLeft") // change the y axis
-   //          .duration(750)
-   //          .call(yAxisLeft);
-   //      svg.select(".y.axis.axisRight") // change the y axis
-   //          .duration(750)
-   //          .call(yAxisRight);
-
-   //    var svg = d3.select("#dualcharttime").select("svg").select("g");
-
-   //    svg.call(tip3);
-   //    svg.call(tip4);
-   //    // svg.call(tip);
-   //              //Attach the data to the graph
-   //    var bluecircles = svg.selectAll(".data-point1").data(data);
-
-   //    bluecircles.enter()
-   //           .append("svg:circle").attr("class", 'data-point1');
-
-
-   //    bluecircles
-   //    .attr("cx", function (d, i) {
-   //           return x(d.date);
-   //       })
-   //    .attr("cy", function (d, i) {
-   //           return y0(d.tottimespent);
-   //       })
-   //    .attr("r", 3)
-   //    .on('mouseover', tip3.show)
-   //    .on('mouseout', tip3.hide);
-
-   //    bluecircles
-   //    .exit()
-   //    .transition()
-   //    .attr('r', 0)
-   //    .remove();
-
-
-   //    var redcircles = svg.selectAll(".data-point2").data(data);
-
-   //    redcircles.enter()
-   //           .append("svg:circle")
-   //           .attr("class", 'data-point2');
-
-
-   //    redcircles
-   //    .attr("cx", function (d, i) {
-   //           return x(d.date);
-   //       })
-   //    .attr("cy", function (d, i) {
-   //           return y1(d.avgtimespent);
-   //       })
-   //    .attr("r", 3)
-   //    .on('mouseover', tip4.show)
-   //    .on('mouseout', tip4.hide);
-
-   //    redcircles
-   //    .exit()
-   //    .transition()
-   //    .attr('r', 0)
-   //    .remove();
 
     }
   });

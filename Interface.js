@@ -219,7 +219,8 @@ function getRetentionData() {
   var user = {};
   var projectQuery = {};
 
-  user['_id.user'] = 'New';
+  //user['_id.user'] = 'New';
+  user['_id.user'] = 'Returning';
 
   matchCriteria(startDate,endDate,frequency,key,type);
   projectCriteria(startDate,endDate,frequency,projectQuery);
@@ -236,7 +237,8 @@ function getRetentionData() {
             db.close();
             return;} //end of function
 
-            console.log(result);
+            console.log(result.length);
+			console.log(result);
 
         //console.log(result[0]['_id']);
         //console.log(result[0]['value']);
@@ -250,10 +252,12 @@ function getRetentionData() {
 
 
 var startDate = 1420204195 + (86400*150);
-var endDate = startDate + (86400*30);
-var frequency = 'Day';
+var endDate = startDate + (86400*300);
+//var startDate = 1439490600;
+//var endDate = 1447525799;
+var frequency = 'Month';
 
-getSessionCounts();
+//getSessionCounts();
 //getSessionDuration();
 //getUserSplit();
-//getRetentionData();
+getRetentionData();

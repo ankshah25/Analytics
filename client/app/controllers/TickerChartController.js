@@ -17,7 +17,7 @@ nameApp.controller('TickerChartCntrl', ['$scope','analyticsService',function ($s
 		    };
 		}
 		var i =0;
-		console.log(data);
+		//console.log(data);
 
 		  
 		var x = d3.time.scale()

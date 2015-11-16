@@ -27,7 +27,13 @@ app.get('/analytics/retention', function (req, res) {
   res.sendFile(__dirname + '/mainpage.html');
 });
 
-app.get('/usersplit', databasecontroller.usersplit);
+app.get('/database/usersplit', databasecontroller.usersplit);
+
+app.get('/database/sessioncounts', databasecontroller.sessioncounts);
+
+app.get('/database/sessionduration', databasecontroller.sessionduration);
+
+app.get('/database/userretention', databasecontroller.userretention);
 // app.get('/analytics', function (req, res) {
 //   // res.send('Hello World!');
 //   res.sendFile(__dirname + '/mainpage.html');
