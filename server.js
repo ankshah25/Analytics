@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var databasecontroller = require('./server/controllers/DatabaseController');
+var devicepiechartcontroller = require('./server/controllers/DevicePieChartController');
 
 app.get('/', function (req, res) {
   // res.send('Hello World!');
@@ -34,15 +35,9 @@ app.get('/database/sessioncounts', databasecontroller.sessioncounts);
 app.get('/database/sessionduration', databasecontroller.sessionduration);
 
 app.get('/database/userretention', databasecontroller.userretention);
-// app.get('/analytics', function (req, res) {
-//   // res.send('Hello World!');
-//   res.sendFile(__dirname + '/mainpage.html');
-// });
 
-// app.get('/analytics/*', function (req, res) {
-//   // res.send('Hello World!');
-//   res.sendFile(__dirname + '/mainpage.html');
-// });
+app.get('/database/devicepiecharts', devicepiechartcontroller.devicepiecharts);
+
 
 var server = app.listen(3000, function () {
   var host = server.address().address;

@@ -59,6 +59,22 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
 
 };
 
+     this.getDevicePieCharts = function(start,end,selectedfrequency) {
+
+      console.log(start,end,selectedfrequency);
+       //var data;
+       return $http.get("/database/devicepiecharts",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":0}})
+        .success(function(response){
+              console.log("I got the data for devicepiecharts");
+              console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+};
 
     this.getDeviceUsersbyCompanyData = function(start,end,selectedfrequency) {
 

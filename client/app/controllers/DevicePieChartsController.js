@@ -3,35 +3,53 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
 
       $(function() {
 
+
+          $('#reportrange').daterangepicker({
+              minDate: moment().subtract(365, 'days'),
+              maxDate: moment(),
+              // ranges: {
+              //    "Last 30 Days": [moment().subtract(29, 'days'), moment()],
+              //    "Last 7 Days": [moment().subtract(6, 'days'), moment()],
+              //    "Last 365 Days": [moment().subtract(365, 'days'), moment()],
+              //    "Today": [moment(), moment()],
+              //    "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+              //    "This Month": [moment().startOf('month'), moment().endOf('month')],
+              //    "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              // }
+          }, cb);
+
+          cb(moment().subtract(6, 'month').startOf('day'), moment().endOf('day'),"Week");
+
           function cb(start, end, freq) {
+            if(freq==undefined)
+            {
+               var diff = end.diff(start,'days');
+               if(diff<=31)
+               {
+                freq = "Day";
+               }
+               else if(diff<=180)
+               {
+                freq = "Week";
+               }
+               else
+               {
+                freq = "Month";
+               }
+
+            }
               $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-              $scope.startdate=start;
-              $scope.enddate=end;
+              $scope.startdate=moment(start).valueOf();
+              $scope.enddate=moment(end).valueOf();
               $scope.selectedfrequency=freq;
-              // var scope = angular.element(
-              //       document.
-              //       getElementById("devicepiecharts")).
-              //       scope();
+
               if(!$scope.$$phase) {
                     $scope.$apply(function () {
-                        $scope.setDates(start,end,freq);
+                        $scope.UpdatePiecharts();
                     });
               }
               //$scope.setDates(start,end,freq);
           }
-          cb(moment().subtract(29, 'days'), moment(),"Last 30 Days");
-
-          $('#reportrange').daterangepicker({
-              ranges: {
-                 "Last 30 Days": [moment().subtract(29, 'days'), moment()],
-                 "Last 7 Days": [moment().subtract(6, 'days'), moment()],
-                 "Last 365 Days": [moment().subtract(365, 'days'), moment()],
-                 "Today": [moment(), moment()],
-                 "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                 "This Month": [moment().startOf('month'), moment().endOf('month')],
-                 "Last Month": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-              }
-          }, cb);
 
       });
 
@@ -39,32 +57,92 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
                   if(!$scope.$$phase) {
                       $scope.$apply(function() {
                           
-                          $scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+                          $scope.UpdatePiecharts();
 
                       });
                 }
                 else
                 {
-                  $scope.setDates($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+                  $scope.UpdatePiecharts();
                 }
     };
 
   $scope.alreadypiechartloaded=false;
 
-  $scope.setDates = function(start,end,freq)
+  $scope.UpdatePiecharts = function()
   {
-      $scope.startdate=start;
-      $scope.enddate=end;
-      $scope.selectedfrequency=freq;
 
-      data1 = analyticsService.getDeviceUsersbyCompanyData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-      updatedevicepiechart("#deviceCompanyPieChart",data1);
-      data2 = analyticsService.getDeviceUsersbyCarriersData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-      updatedevicepiechart("#deviceCarriersPieChart",data2)
-      data3 = analyticsService.getDeviceUsersbyOSVersions($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-      updatedevicepiechart("#deviceOSVersionsPieChart",data3)
+      var DevicePieChartsPromise  = analyticsService.getDevicePieCharts($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+      DevicePieChartsPromise.then(function(response){
+
+      devicepiechartdata = response.data;
+      console.log(devicepiechartdata);
+
+      for(i=0;i<devicepiechartdata.length;i++)
+      {
+        if(devicepiechartdata[i]._id=="device")
+        {
+          devicedata = devicepiechartdata[i].value;
+        }
+        else if(devicepiechartdata[i]._id=="deviceManufacturer")
+        {
+          deviceManufacturerdata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="deviceType")
+        {
+          deviceTypedata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="platform")
+        {
+          platformdata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="operatingSystemVersion")
+        {
+          operatingSystemVersiondata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="appVersion")
+        {
+          appVersiondata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="carrier")
+        {
+          carrierdata = devicepiechartdata[i].value; 
+        }
+        else if(devicepiechartdata[i]._id=="resolution")
+        {
+          resolutiondata = devicepiechartdata[i].value; 
+        }                                        
+      }
+
+console.log(devicedata);
+console.log(deviceManufacturerdata);
+console.log(deviceTypedata);
+console.log(platformdata);
+console.log(operatingSystemVersiondata);
+console.log(appVersiondata);
+console.log(carrierdata);
+console.log(resolutiondata);
+
+updatedevicepiechart("#divdevice",devicedata);
+updatedevicepiechart("#divdeviceManufacturer",deviceManufacturerdata);
+updatedevicepiechart("#divdeviceType",deviceTypedata);
+updatedevicepiechart("#divplatform",platformdata);
+updatedevicepiechart("#divoperatingSystemVersion",operatingSystemVersiondata);
+updatedevicepiechart("#divappVersion",appVersiondata);
+updatedevicepiechart("#divcarrier",carrierdata);
+updatedevicepiechart("#divresolution",resolutiondata);
+
+
+      // data1 = analyticsService.getDeviceUsersbyCompanyData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+      // updatedevicepiechart("#deviceCompanyPieChart",data1);
+      // data2 = analyticsService.getDeviceUsersbyCarriersData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+      // updatedevicepiechart("#deviceCarriersPieChart",data2)
+      // data3 = analyticsService.getDeviceUsersbyOSVersions($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+      // updatedevicepiechart("#deviceOSVersionsPieChart",data3)
 
       $scope.alreadypiechartloaded = true;
+
+     })
   }
 
   function updatedevicepiechart(div,data)
@@ -87,16 +165,16 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
 
     var pie = d3.layout.pie()
         .sort(null)
-        .value(function(d) { return d.usercount; });
+        .value(function(d) { return d.Unique_User_Count; });
 
     data.forEach(function(d) {
-      d.usercount = +d.usercount;
+      d.Unique_User_Count = +d.Unique_User_Count;
     });
      
      var total=0;
      for(var i = 0;i<data.length;i++)
      {
-       total = total + data[i].usercount;
+       total = total + data[i].Unique_User_Count;
      }
 
     if($scope.alreadypiechartloaded == false)
@@ -168,7 +246,7 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
             })
         .text(function (d, i) {
                 //return t[i];
-                return d.label + " - " + d.usercount + " users"; 
+                return d._id + " - " + d.Unique_User_Count + " users"; 
             });
 
     }
@@ -238,7 +316,7 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
             })
         .text(function (d, i) {
                 //return t[i];
-                return d.label + " - " + d.usercount + " users";  
+                return d._id + " - " + d.Unique_User_Count + " users";  
             });
 
 

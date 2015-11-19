@@ -23,11 +23,7 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
           	if(freq==undefined)
             {
                var diff = end.diff(start,'days');
-               if(diff<=2)
-               {
-                 freq = "Hour";
-               }
-               else if(diff<=31)
+               if(diff<=31)
                {
                 freq = "Day";
                }
@@ -89,13 +85,13 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
       data1 = response.data;
       console.log(data1);
 
-      data2=[ 
-                      {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-                      {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-                      {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-                      {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
-                   ];
-           console.log(data2);        
+      // data2=[ 
+      //                 {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
+      //                 {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
+      //                 {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
+      //                 {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
+      //              ];
+      //      console.log(data2);        
       updateuserretentionchart1("userRetentionchart",data1);
 
       $scope.alreadyretentionchartloaded = true; 
@@ -104,18 +100,115 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
 
 	function updateuserretentionchart1(tableId,data)
 	{
-		console.log(data[0]["_id"]["key"]);
-		console.log(data[0]._id.key);
-		console.log(data[0].value);
-		console.log(data[0].value[0]);
+		// console.log(data[0]["_id"]["key"]);
+		// console.log(data[0]._id.key);
+		// console.log(data[0].value);
+		// console.log(data[0].value[0]);
+		// console.log(data[1].value[0]);
+		// console.log(data[2].value[0]);
+		// console.log(data[3].value[0]);
+		// console.log(data[4].value[0]);
+		// console.log(data[5].value[0]);
 
 
-         for(var mainkey in data[0].value[0])
-	      { 
-	         console.log(mainkey);
-	         console.log(data[0].value[0][mainkey]);
-	         //console.log(data[0].value[0]."20150829");
+	   var table = document.getElementById(tableId);
+	   var rowCount = table.rows.length;
+	   console.log(rowCount);
+	   if(rowCount>0)
+	   {
+         console.log("if function called");
+         $("table").children().remove();
+	   }
+
+       var i=0;
+       var row,newcell;
+	   if(data.length > 0)
+	   { 
+	      //console.log(mainkey);
+	      
+	      row = table.insertRow(0);
+	      newcell=row.insertCell(i);
+	      newcell.innerHTML ='<h4>&nbsp; Range &nbsp;</h4>';
+	      newcell.className = 'headercolumn';
+	      for(var key in data[0].value[0])
+	      {
+	      	i++;
+	      	newcell = row.insertCell(i);
+	      	if($scope.selectedfrequency=="Month")
+	   	    {
+               newcell.innerHTML ='<h4> &nbsp;'+moment(key, 'YYYYMM').format('MMM YYYY')+'&nbsp;</h4>';
+	   	    }
+			else
+			{
+				newcell.innerHTML ='<h4> &nbsp;'+moment(key, 'YYYYMMDD').format('DD MMM YYYY')+'&nbsp;</h4>';
+			}
+              //newcell.innerHTML ='<h4> &nbsp;'+key+'&nbsp;</h4>';
+              newcell.className = 'headercolumn';
+	      	  //console.log(key);
 	      }
+
+	      var j;
+
+		  for(i=0;i<data.length;i++)
+		  {
+		   	
+		   	row = table.insertRow(i+1);
+	   	    j=0;
+	   	    newcell = row.insertCell(j);
+	   	    //moment(data[i]._id.key, 'yyyymmdd').format('ddmmyyyy')
+	   	    if($scope.selectedfrequency=="Month")
+	   	    {
+               newcell.innerHTML ='<h4> &nbsp;'+moment(data[i]._id.key, 'YYYYMM').format('MMM YYYY')+'&nbsp;&nbsp;&nbsp;</h4>';
+	   	    }
+			else
+			{
+				newcell.innerHTML ='<h4> &nbsp;'+moment(data[i]._id.key, 'YYYYMMDD').format('DD MMM YYYY')+'&nbsp;&nbsp;&nbsp;</h4>';
+			}
+            
+            newcell.className = 'headercolumn';
+            mainkey=data[i]._id.key;
+            j++;
+
+		   	 for(var key in data[i].value[0])
+		   	 { 
+
+		   	 	 //console.log(mainkey);
+
+		   	 	    newcell = row.insertCell(j);
+		            newcell.innerHTML ='<h5> &nbsp;'+data[i].value[0][key]+'&nbsp;</h5>';
+		            if((parseInt(data[i].value[0][key])/parseInt(data[i].value[0][mainkey])*100)>70)
+		            {
+		            	newcell.className = 'category71to100';
+		            }
+		            else if((parseInt(data[i].value[0][key])/parseInt(data[i].value[0][mainkey])*100)>40)
+		            {
+		            	newcell.className = 'category41to70';
+		            }
+		            else if((parseInt(data[i].value[0][key])/parseInt(data[i].value[0][mainkey])*100)>0)
+		            {
+		            	newcell.className = 'category0to40';
+		            }
+		            else
+		            {
+		            	newcell.className = 'categorynone';
+		            }	            
+		            j++;
+
+		   	 }
+		   }
+
+	   }
+
+       //   for(var mainkey in data[0].value[0])
+	      // { 
+	         
+	      //    console.log(data[0].value[0]);
+	      //    console.log(data[0].value[0]);
+	      //    console.log(data[0].value[0]);
+	      //    console.log(data[0].value[0]);
+	      //    console.log(data[0].value[0][mainkey]);
+	      //    //console.log(data[0].value[0]."20150829");
+	      // }
 	}
   // function updateuserretentionchart(tableId,data)
   // {

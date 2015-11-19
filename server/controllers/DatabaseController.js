@@ -462,9 +462,11 @@ module.exports.userretention = function(req,res){
     matchCriteria(start,end,selectedfrequency,key,type);
     projectCriteria(start,end,selectedfrequency,projectQuery);
 
-    db4.collection('agg_retention_data').find(
-       {$and : [key,type,user]}
-       ,projectQuery
+
+          db4.collection('agg_retention_data').find
+            ({$and : [key,type,user]}
+             ,projectQuery
+            ).sort({ '_id.key' : 1}
                ,function (err , result) {
                   if (err || !result) {
                       console.log(err);
@@ -481,23 +483,35 @@ module.exports.userretention = function(req,res){
     }
     else
     {
-        if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
+        if((selectedfrequency == "Day") || (selectedfrequency == "Week"))
         {
-            data = [ 
-                      {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-                      {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-                      {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-                      {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
-                   ];
+          data = [ 
+                  { _id: { key: '20150822', type: 'Week', user: 'Returning' },
+                    value: [ {20150822: 10, 20150829: 8, 20150905: 7, 20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150829', type: 'Week', user: 'Returning' },
+                    value: [ {20150829: 8, 20150905: 7, 20150912: 5, 20150919: 4} ]  },
+                  { _id: { key: '20150905', type: 'Week', user: 'Returning' },
+                    value: [ {20150905: 7, 20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150912', type: 'Week', user: 'Returning' },
+                    value: [ {20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150919', type: 'Week', user: 'Returning' },
+                    value: [ {20150919: 4} ] }
+                 ]
+            // data = [ 
+            //           {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
+            //           {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
+            //           {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
+            //           {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
+            //        ];
         }
         else 
         {
-            data = [ 
-                      {"20140902":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-                      {"20140909":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-                      {"20140916":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-                      {"20140923":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389"}}
-             ];
+            // data = [ 
+            //           {"20140902":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
+            //           {"20140909":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
+            //           {"20140916":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
+            //           {"20140923":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389"}}
+            //  ];
         }
 
         return res.json(data);
