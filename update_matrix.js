@@ -1,5 +1,5 @@
 //Set the connection details
-var databaseurl = 'test';
+var databaseurl = 'localhost:27017/test';
 var mongojs= require('mongojs');
 var db = mongojs(databaseurl);
 //var sessionCollection = db.collection('user_test');
@@ -8,20 +8,26 @@ var eventCollection = db.collection('user_event_info');
 var hourlySessionCollection = db.collection('user_hourly_session_info');
 var hourlyEventCollection = db.collection('user_hourly_event_info');
 
+var tickerCollection = db.collection('real_time_data');
+
 var recordType = 'Begin';
-var activityEpoch = 1420204195 + (86400*167);
+//var activityEpoch = 1448177051 + (60*60) + 300;
+var activityEpoch = 1448416560;
+//var activityEpoch = 1448329515 + (60*60) + 300;
 var resolution = '800*1200';
-var deviceID = '1';
+var deviceID = '104';
 var orientation = 'potrait';
-var deviceManufacturer = 'Apple';
+var deviceManufacturer = 'Samsung';
 var deviceType = 'Mobile';
 var device = 'gt-2550';
 var platform = 'Android';
 var operatingSystemVersion = '1.0';
-var appVersion = '2.0';
+var appVersion = '1.0';
 var IPAddress = '172.0.0.1';   //City to be calculated later
-var carrier = 'Vodafone';
+var carrier = 'Airtel';
 var network = 'wifi';          //Not updated
+
+//console.log(activityEpoch);
 
 //For Event/Session Begin/Session End - derive day, week and month
 var activityTime = new Date(0); // The 0 there is the key, which sets the date to the epoch
@@ -33,6 +39,8 @@ var mm = activityTime.getMonth()+1; //January is 0!
 var yyyy = activityTime.getFullYear();
 if(dd<10) {   dd='0'+dd};
 if(mm<10) {   mm='0'+mm};
+
+//console.log(mm);
 
 //Derive Week
 var weekDate = new Date(activityTime);
@@ -51,11 +59,23 @@ var hh = activityTime.getHours();
 if (hh<10) {  hh='0'+hh};
 var mi = activityTime.getMinutes();
 if (mi<10) {  mi='0'+mi};
+var ss = activityTime.getSeconds();
+if (ss >=0 && ss <15) ss = '15';
+else if (ss >=15 && ss <30) ss = '30';
+else if (ss >=30 && ss <45) ss = '45';
+else ss = '00';
 
-var hourFormat = yyyy + mm + dd + hh;
-var dayFormat = yyyy + mm + dd;
-var weekFormat = weekyyyy + weekmm + weekdd;
-var monthFormat = yyyy + mm;
+var hourFormat = '' + yyyy + mm + dd + hh;
+var dayFormat = '' + yyyy + mm + dd;
+var weekFormat = '' + weekyyyy + weekmm + weekdd;
+var monthFormat = '' + yyyy + mm;
+
+//console.log(yyyy);
+//console.log(mm);
+//console.log(dd);
+//console.log(dayFormat);
+
+var secondEpoch = (new Date(yyyy,mm-1,dd,hh,mi,ss).getTime())/1000;
 
 //For Session Begin
 if (recordType == 'Begin')
@@ -146,6 +166,7 @@ if (recordType == 'Begin')
       //If the user exists then first login time is not changed
       else updateUser();
 
+      tickerCollection.update({'_id' : secondEpoch},{$inc : {count : 1}},{upsert:true});
       sessionCollection.update({'_id' : deviceID},updateSessionQuery,{upsert:true});
       hourlySessionCollection.update({'_id' : deviceID},updateHourlyQuery,{upsert:true});
       db.close();
@@ -155,7 +176,11 @@ if (recordType == 'Begin')
 
 if (recordType == 'End')
 {
-  var timeSpent = 100;
+  var timeSpent = 90;
+
+  var tickerEndEpoch = 0;
+  if (timeSpent%15 == 0) tickerEndEpoch = timeSpent;
+  else tickerEndEpoch = (timeSpent + 15) - (timeSpent%15);
 
   //Derive fields to be updated
   var durationHour = 'DH'+ hourFormat;
@@ -173,6 +198,7 @@ if (recordType == 'End')
   incrementHourlyQuery[durationHour] = timeSpent;
 
   //update the time spent during the session
+  tickerCollection.update({'_id' : secondEpoch + tickerEndEpoch},{$inc : {count : -1}},{upsert:true});
   sessionCollection.update({'_id' : deviceID }, {$inc : incrementSessionQuery});
   hourlySessionCollection.update({'_id' : deviceID }, {$inc : incrementHourlyQuery});
   db.close();

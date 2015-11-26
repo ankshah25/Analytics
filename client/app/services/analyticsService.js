@@ -76,79 +76,79 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
 
 };
 
-    this.getDeviceUsersbyCompanyData = function(start,end,selectedfrequency) {
+    // this.getDeviceUsersbyCompanyData = function(start,end,selectedfrequency) {
 
-      if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
-      {
-         var data = [ 
-                    {label:"Samsung",usercount:"300"},
-                    {label:"Sony",usercount:"250"},
-                    {label:"Micromax",usercount:"100"},
-                    {label:"Lava",usercount:"245"},
-                    {label:"HTC",usercount:"123"}
-                 ];
-      }
-      else
-      {
-           var data = [ 
-              {label:"Samsung",usercount:"300"},
-              {label:"Sony",usercount:"650"},
-              {label:"Micromax",usercount:"400"},
-              {label:"Lava",usercount:"456"},
-           ];
-      }
-         return data;
-     };
+    //   if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
+    //   {
+    //      var data = [ 
+    //                 {label:"Samsung",usercount:"300"},
+    //                 {label:"Sony",usercount:"250"},
+    //                 {label:"Micromax",usercount:"100"},
+    //                 {label:"Lava",usercount:"245"},
+    //                 {label:"HTC",usercount:"123"}
+    //              ];
+    //   }
+    //   else
+    //   {
+    //        var data = [ 
+    //           {label:"Samsung",usercount:"300"},
+    //           {label:"Sony",usercount:"650"},
+    //           {label:"Micromax",usercount:"400"},
+    //           {label:"Lava",usercount:"456"},
+    //        ];
+    //   }
+    //      return data;
+    //  };
 
 
-    this.getDeviceUsersbyCarriersData = function(start,end,selectedfrequency) {
+    // this.getDeviceUsersbyCarriersData = function(start,end,selectedfrequency) {
 
-      if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
-      {
-         var data = [ 
-                    {label:"Vodafone",usercount:"300"},
-                    {label:"Idea",usercount:"250"},
-                    {label:"Airtel",usercount:"100"},
-                    {label:"Aircel",usercount:"245"},
-                    {label:"Docomo",usercount:"123"}
-                 ];
-      }
-      else
-      {
-           var data = [ 
-              {label:"Vodafone",usercount:"300"},
-              {label:"Idea",usercount:"650"},
-              {label:"Aircel",usercount:"400"},
-              {label:"Docomo",usercount:"456"},
-           ];
-      }
-         return data;
-     };
+    //   if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
+    //   {
+    //      var data = [ 
+    //                 {label:"Vodafone",usercount:"300"},
+    //                 {label:"Idea",usercount:"250"},
+    //                 {label:"Airtel",usercount:"100"},
+    //                 {label:"Aircel",usercount:"245"},
+    //                 {label:"Docomo",usercount:"123"}
+    //              ];
+    //   }
+    //   else
+    //   {
+    //        var data = [ 
+    //           {label:"Vodafone",usercount:"300"},
+    //           {label:"Idea",usercount:"650"},
+    //           {label:"Aircel",usercount:"400"},
+    //           {label:"Docomo",usercount:"456"},
+    //        ];
+    //   }
+    //      return data;
+    //  };
 
-    this.getDeviceUsersbyOSVersions = function(start,end,selectedfrequency) {
+    // this.getDeviceUsersbyOSVersions = function(start,end,selectedfrequency) {
 
-      if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
-      {
-         var data = [ 
-                    {label:"4.4 Kitkat",usercount:"300"},
-                    {label:"5.0 Lollipop",usercount:"250"},
-                    {label:"6.0 Marshmallow",usercount:"100"},
-                    {label:"2.3 Gingerbread",usercount:"245"},
-                    {label:"2.0 Eclair",usercount:"123"},
-                    {label:"4.5 Kitkat",usercount:"344"}
-                 ];
-      }
-      else 
-      {
-           var data = [ 
-              {label:"4.4 Kitkat",usercount:"300"},
-              {label:"6.0 Marshmallow",usercount:"650"},
-              {label:"2.3 Gingerbread",usercount:"400"},
-              {label:"2.0 Eclair",usercount:"456"},
-           ];
-      }
-         return data;
-     };
+    //   if((selectedfrequency == "Today") || (selectedfrequency == "Yesterday"))
+    //   {
+    //      var data = [ 
+    //                 {label:"4.4 Kitkat",usercount:"300"},
+    //                 {label:"5.0 Lollipop",usercount:"250"},
+    //                 {label:"6.0 Marshmallow",usercount:"100"},
+    //                 {label:"2.3 Gingerbread",usercount:"245"},
+    //                 {label:"2.0 Eclair",usercount:"123"},
+    //                 {label:"4.5 Kitkat",usercount:"344"}
+    //              ];
+    //   }
+    //   else 
+    //   {
+    //        var data = [ 
+    //           {label:"4.4 Kitkat",usercount:"300"},
+    //           {label:"6.0 Marshmallow",usercount:"650"},
+    //           {label:"2.3 Gingerbread",usercount:"400"},
+    //           {label:"2.0 Eclair",usercount:"456"},
+    //        ];
+    //   }
+    //      return data;
+    //  };
 
      this.getDeviceUsersbyCitiesData = function(start,end,selectedfrequency) {
 
@@ -176,13 +176,47 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
          return data;
      };
 
-    this.getUserRetentionData = function(start,end,selectedfrequency) {
+    this.getTickerData = function(start) {
+
+      console.log(start);
+       //var data;
+       return $http.get("/database/ticker",{params:{"param1": start}})
+        .success(function(response){
+              console.log("I got the data for ticker");
+              console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+    };
+
+    this.getReturningUserRetentionData = function(start,end,selectedfrequency) {
 
       console.log(start,end,selectedfrequency);
        //var data;
-       return $http.get("/database/userretention",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":0}})
+       return $http.get("/database/returninguserretention",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":0}})
         .success(function(response){
-              console.log("I got the data for user retention");
+              console.log("I got the data for returning user retention");
+              console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+     };
+
+    this.getNewUserRetentionData = function(start,end,selectedfrequency) {
+
+      console.log(start,end,selectedfrequency);
+       //var data;
+       return $http.get("/database/newuserretention",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":0}})
+        .success(function(response){
+              console.log("I got the data for new user retention");
               console.log(response);
               return response;
              // return response;

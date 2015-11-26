@@ -3,6 +3,14 @@ var databaseurl = 'test';
 var mongojs= require('mongojs');
 var db = mongojs(databaseurl);
 
+function dbCloseConnection(){
+   connectionCount--;
+   if (connectionCount == 0) {
+     console.log(resultSet);
+     db.close();
+}} //end of function dbCloseConnection
+
+
 function matchCriteria(startDate, endDate, matchCondition)
 {
   for(var i = new Date(startDate); i<=endDate; i)
@@ -14,8 +22,8 @@ function matchCriteria(startDate, endDate, matchCondition)
     if(dd<10) {   dd='0'+dd};
     if(mm<10) {   mm='0'+mm};
 
-    var dayKey = yyyy + mm + dd;
-    var monthKey = yyyy + mm;
+    var dayKey = '' + yyyy + mm + dd;
+    var monthKey = '' + yyyy + mm;
 
     var matchQuery = {};
 
@@ -40,8 +48,172 @@ function matchCriteria(startDate, endDate, matchCondition)
   } //End of 'for' loop
 } //end of function matchCriteria
 
-var startDateEpoch = 1420204195 + (86400*153);
-var endDateEpoch = startDateEpoch + (86400*180);
+function writeResult(output){
+  db.collection('device_details_temp').update
+    ({'_id' : 'Custom'}
+    ,{$set : {'value' : output}}
+    ,{upsert : true}
+    ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;
+      }
+     generateResult();
+    });
+} //end of function writeResult
+
+function generateResult(){
+
+  //resolution
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.resolution'
+                ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+      if (err || !result) {
+         console.log(err);
+         db.close();
+         return;} //end of function
+
+      resultSet.push({'_id' : 'resolution', 'value' : result});
+      //console.log(result);
+      dbCloseConnection();
+    });
+
+  //deviceManufacturer
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.deviceManufacturer'
+                ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'deviceManufacturer', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+     });
+
+  //deviceType
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.deviceType'
+                ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'deviceType', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+  //device
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.device'
+               ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'device', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+  //platform
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.platform'
+               ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'platform', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+  //operatingSystemVersion
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.operatingSystemVersion'
+               ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'operatingSystemVersion', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+  //appVersion
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.appVersion'
+               ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'appVersion', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+  //carrier
+  connectionCount++;
+  db.collection('device_details_temp').aggregate
+    ({$match : {'_id' : 'Custom'}}
+     ,{$unwind : '$value'}
+     ,{$group : {'_id' : '$value._id.carrier'
+               ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}}}
+     ,function (err , result) {
+       if (err || !result) {
+           console.log(err);
+           db.close();
+           return;} //end of function
+
+       resultSet.push({'_id' : 'carrier', 'value' : result});
+       //console.log(result);
+       dbCloseConnection();
+    });
+
+} //end of function generateResult
+
+
+var startDateEpoch = 1448044200 - (86400*328);
+var endDateEpoch = 1448044200 - (86400*320);
 
 var startDate = new Date(0); // The 0 there is the key, which sets the date to the epoch
 startDate.setUTCSeconds(startDateEpoch);
@@ -49,15 +221,11 @@ startDate.setUTCSeconds(startDateEpoch);
 var endDate = new Date(0); // The 0 there is the key, which sets the date to the epoch
 endDate.setUTCSeconds(endDateEpoch);
 
-console.log(startDateEpoch,endDateEpoch);
-console.log(startDate,endDate);
 var matchCondition = [];
 matchCriteria(startDate,endDate,matchCondition);
 
 var groupQuery = {};
-groupQuery['_id'] = {'key' : 'Custom'
-                      ,'resolution' : '$lr'
-                      ,'orientation' : '$lo'
+groupQuery['_id'] = { 'resolution' : '$lr'
                       ,'deviceManufacturer' : '$lm'
                       ,'deviceType' : '$lt'
                       ,'device' : '$ld'
@@ -70,6 +238,7 @@ groupQuery['_id'] = {'key' : 'Custom'
 var sumQuery = {$sum : 1};
 groupQuery['Unique_User_Count'] = sumQuery;
 
+var connectionCount = 0;
 var resultSet = [];
 
 db.collection('user_session_info').aggregate(
@@ -82,146 +251,4 @@ db.collection('user_session_info').aggregate(
                return;} //end of function
 
            writeResult(result);
-       });
-
-var connectionCount = 0;
-
- function dbCloseConnection(){
-   connectionCount--;
-   if (connectionCount == 0) {
-     console.log(resultSet[0]);
-     console.log(resultSet[1]);
-     console.log(resultSet[2]);
-     console.log(resultSet[3]);
-     console.log(resultSet[4]);
-     console.log(resultSet[5]);
-     console.log(resultSet[6]);
-     console.log(resultSet[7]);
-     db.close();
-   }}
-
-
-function writeResult(output){
-  //console.log(output);
-  db.collection('device_details_temp').insert(output);
-
-  //resolution
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.resolution'
-                ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-      if (err || !result) {
-         console.log(err);
-         db.close();
-         return;} //end of function
-
-      resultSet.push({'_id' : 'resolution', 'value' : result});
-      dbCloseConnection();
     });
-
-  //deviceManufacturer
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.deviceManufacturer'
-                ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'deviceManufacturer', 'value' : result});
-       dbCloseConnection();
-     });
-
-  //deviceType
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.deviceType'
-                ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'deviceType', 'value' : result});
-       dbCloseConnection();
-    });
-
-  //device
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.device'
-               ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'device', 'value' : result});
-       dbCloseConnection();
-    });
-
-  //platform
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.platform'
-               ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'platform', 'value' : result});
-       dbCloseConnection();
-    });
-
-  //operatingSystemVersion
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.operatingSystemVersion'
-               ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'operatingSystemVersion', 'value' : result});
-       dbCloseConnection();
-    });
-
-  //appVersion
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.appVersion'
-               ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'appVersion', 'value' : result});
-       dbCloseConnection();
-    });
-
-  //carrier
-  connectionCount++;
-  db.collection('device_details_temp').aggregate
-    ({$group : {'_id' : '$_id.carrier'
-               ,'Unique_User_Count' : {$sum : '$Unique_User_Count'}}}
-     ,function (err , result) {
-       if (err || !result) {
-           console.log(err);
-           db.close();
-           return;} //end of function
-
-       resultSet.push({'_id' : 'carrier', 'value' : result});
-       dbCloseConnection();
-    });
-} //end of function writeResult

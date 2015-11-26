@@ -130,6 +130,7 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','$http','analyticsSe
    SessionCountsPromise.then(function(response){
 
    data =  response.data;
+   console.log(data);
   var margin = {top: 30, right: 40, bottom: 30, left: 50},
   width = 950 - margin.left - margin.right,
   height = 270 - margin.top - margin.bottom;
@@ -220,7 +221,7 @@ nameApp.controller('DualChartSessionandTimeCtrl', ['$scope','$http','analyticsSe
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+       return "<strong>Unique Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
    })
 
 
@@ -271,7 +272,7 @@ if($scope.alreadysessionloaded==false)
                       .style("fill", "red")       
                       .call(yAxisRight);
 
-        var yAxisRightLabelText = "Average number of sessions";
+        var yAxisRightLabelText = "Unique number of sessions";
         var yAxisRightLabelOffset = 40;
 
         var yAxisRightLabel = yAxisRightG.append("text")
@@ -364,7 +365,7 @@ if($scope.alreadysessionloaded==false)
          .attr('class', 'd3-tip')
          .offset([-10, 0])
          .html(function (d) {
-         return "<strong>Avg Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+         return "<strong>Unique Number of Sessions:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
      })
     
 
@@ -480,7 +481,7 @@ if($scope.alreadysessionloaded==false)
 
   var valueline2 = d3.svg.line()
       .x(function(d) { return x(d._id); })
-      .y(function(d) { return y1(d.Unique_User_Count); });
+      .y(function(d) { return y1(d.Average_Time_Spent); });
 
   var xAxis = d3.svg.axis().scale(x)
       .orient("bottom");
@@ -529,6 +530,7 @@ if($scope.selectedfrequency=="Month")
       d._id = parseDate(d._id);
       d.Total_Time_Spent = +d.Total_Time_Spent;
       d.Unique_User_Count = +d.Unique_User_Count;
+       d.Average_Time_Spent = (d.Unique_User_Count==0)?0:(d.Total_Time_Spent/d.Unique_User_Count);
   });
 
   // Scale the range of the data
@@ -536,7 +538,7 @@ if($scope.selectedfrequency=="Month")
   y0.domain([0, d3.max(data, function(d) { 
       return Math.max(d.Total_Time_Spent); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.Unique_User_Count); })]); 
+      return Math.max(d.Average_Time_Spent); })]); 
 
 
  //var svg = d3.select("#dualcharttime");
@@ -552,7 +554,7 @@ if($scope.selectedfrequency=="Month")
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+       return "<strong>Average Time Spent:</strong> <span style='color:red'>" + d.Average_Time_Spent +"</span>";
    })
 
 
@@ -605,7 +607,7 @@ if($scope.alreadytimeloaded==false)
                       .style("fill", "red")       
                       .call(yAxisRight);
 
-        var yAxisRightLabelText = "Average Time spent";
+        var yAxisRightLabelText = "Average Time Spent";
         var yAxisRightLabelOffset = 40;
 
         var yAxisRightLabel = yAxisRightG.append("text")
@@ -664,7 +666,7 @@ if($scope.alreadytimeloaded==false)
              return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.Unique_User_Count);
+             return y1(d.Average_Time_Spent);
          })
       .attr("r", 3)
       .on('mouseover', tip2.show)
@@ -698,7 +700,7 @@ if($scope.alreadytimeloaded==false)
          .attr('class', 'd3-tip')
          .offset([-10, 0])
          .html(function (d) {
-         return "<strong>Avg Time Spent:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+         return "<strong>Average Time Spent:</strong> <span style='color:red'>" + d.Average_Time_Spent +"</span>";
      })
     
 
@@ -772,7 +774,7 @@ if($scope.alreadytimeloaded==false)
              return x(d._id);
          })
       .attr("cy", function (d, i) {
-             return y1(d.Unique_User_Count);
+             return y1(d.Average_Time_Spent);
          })
       .attr("r", 3)
       .on('mouseover', tip4.show)
@@ -863,6 +865,7 @@ if($scope.selectedfrequency=="Month")
       d._id = parseDate(d._id);
       d.New_User_Count = +d.New_User_Count;
       d.Unique_User_Count = +d.Unique_User_Count;
+      d.Returning_User_Count = d.Unique_User_Count - d.New_User_Count;
       });
 
 
@@ -871,7 +874,7 @@ if($scope.selectedfrequency=="Month")
   y0.domain([0, d3.max(data, function(d) { 
       return Math.max(d.New_User_Count); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.Unique_User_Count); })]); 
+      return Math.max(d.Returning_User_Count); })]); 
 
 
 
@@ -888,7 +891,7 @@ if($scope.selectedfrequency=="Month")
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Returning_User_Count +"</span>";
    })
 
 
@@ -969,8 +972,8 @@ bars2.enter().append("rect")
       .attr("class", "bar2")
       .attr("x", function(d) { return x(d._id); })
       .attr("width", 10)
-      .attr("y", function(d) { return y1(d.Unique_User_Count); })
-      .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); })
+      .attr("y", function(d) { return y1(d.Returning_User_Count); })
+      .attr("height", function(d,i,j) { return height - y1(d.Returning_User_Count); })
       .on('mouseover', tip2.show)
       .on('mouseout', tip2.hide);
 
@@ -992,7 +995,7 @@ bars2.enter().append("rect")
        .attr('class', 'd3-tip')
        .offset([-10, 0])
        .html(function (d) {
-       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Unique_User_Count +"</span>";
+       return "<strong>Total number of returning users:</strong> <span style='color:red'>" + d.Returning_User_Count +"</span>";
    })
 
 
@@ -1001,7 +1004,7 @@ bars2.enter().append("rect")
   y0.domain([0, d3.max(data, function(d) { 
       return Math.max(d.New_User_Count); })]);  
   y1.domain([0, d3.max(data, function(d) {
-      return Math.max(d.Unique_User_Count); })]); 
+      return Math.max(d.Returning_User_Count); })]); 
 
        var svg = d3.select("#dualchartuser").transition();
 
@@ -1052,8 +1055,8 @@ bars2.enter().append("rect")
               .attr("class", "bar2")
               .attr("x", function(d) { return x(d._id); })
               .attr("width", 10)
-              .attr("y", function(d) { return y1(d.Unique_User_Count); })
-              .attr("height", function(d,i,j) { return height - y1(d.Unique_User_Count); })
+              .attr("y", function(d) { return y1(d.Returning_User_Count); })
+              .attr("height", function(d,i,j) { return height - y1(d.Returning_User_Count); })
               .on('mouseover', tip2.show)
               .on('mouseout', tip2.hide);
 

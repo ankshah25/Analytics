@@ -4,16 +4,16 @@ var mongojs= require('mongojs');
 var db = mongojs(databaseurl);
 
 //To be executed for past 31 days
-var dayStartDate = new Date(2015, 5, 01);
-var dayEndDate = new Date(2015, 5, 20);
+var dayStartDate = new Date(2015, 10, 02);
+var dayEndDate = new Date(2015, 10, 02);
 
 //To be executed for past 26 weeks
-var weekStartDate = new Date(2015, 4, 01);
-var weekEndDate = new Date(2015, 5, 24);
+var weekStartDate = new Date(2015, 0, 01);
+var weekEndDate = new Date(2015, 10, 30);
 
 //To be executed for past 12 months
-var monthStartDate = new Date(2015, 1, 01);
-var monthEndDate = new Date(2015, 5, 24);
+var monthStartDate = new Date(2015, 0, 01);
+var monthEndDate = new Date(2015, 10, 30);
 
 var connectionCount = 0;
 
@@ -85,12 +85,16 @@ for (var daydt = new Date(dayStartDate);
     groupQuery[nextDayKey] = {$sum : {$cond: [{$gt: ['$' + sessionDay, 0]},1,0]}};
     }
 
+  console.log(matchQueryNewUser);
+  console.log(groupQuery);
+
   //Aggregate data for New User
   connectionCount++;
   db.collection('user_session_info').aggregate
     ({$match : matchQueryNewUser}
      ,{$group: groupQuery}
-      ,function (err , result) {
+//     ,{$sort : {'_id' : 1}}
+     ,function (err , result) {
          if (err || !result) {
              console.log(err);
              db.close();
@@ -106,7 +110,8 @@ for (var daydt = new Date(dayStartDate);
    connectionCount++;
    db.collection('user_session_info').aggregate
     ({$match : {$and : [matchQuery1ReturningUser,matchQuery2ReturningUser]}}
-    ,{$group: groupQuery}
+     ,{$group: groupQuery}
+//     ,{$sort : {'_id' : 1}}
      ,function (err , result) {
         if (err || !result) {
             console.log(err);
@@ -174,7 +179,8 @@ for (var weekdt = new Date(weekStartDate);
   db.collection('user_session_info').aggregate
     ({$match : matchQueryNewUser}
      ,{$group: groupQuery}
-      ,function (err , result) {
+//     ,{$sort : {'_id' : 1}}
+     ,function (err , result) {
          if (err || !result) {
              console.log(err);
              db.close();
@@ -189,7 +195,8 @@ for (var weekdt = new Date(weekStartDate);
     connectionCount++;
     db.collection('user_session_info').aggregate
      ({$match : {$and : [matchQuery1ReturningUser,matchQuery2ReturningUser]}}
-     ,{$group: groupQuery}
+      ,{$group: groupQuery}
+//      ,{$sort : {'_id' : 1}}
       ,function (err , result) {
          if (err || !result) {
              console.log(err);
@@ -249,7 +256,8 @@ for (var monthdt = new Date(monthStartDate);
   db.collection('user_session_info').aggregate
     ({$match : matchQueryNewUser}
      ,{$group: groupQuery}
-      ,function (err , result) {
+//     ,{$sort : {'_id' : 1}}
+     ,function (err , result) {
          if (err || !result) {
              console.log(err);
              db.close();
@@ -264,7 +272,8 @@ for (var monthdt = new Date(monthStartDate);
     connectionCount++;
     db.collection('user_session_info').aggregate
      ({$match : {$and : [matchQuery1ReturningUser,matchQuery2ReturningUser]}}
-     ,{$group: groupQuery}
+      ,{$group: groupQuery}
+//      ,{$sort : {'_id' : 1}}
       ,function (err , result) {
          if (err || !result) {
              console.log(err);

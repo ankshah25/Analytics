@@ -1,5 +1,7 @@
 //Set the connection details
-var databaseurl = 'test';
+//var databaseurl = '169.254.41.202:27017/test';
+var databaseurl ='test'
+//var databaseurl = 'test';
 var mongojs= require('mongojs');
 //var db = mongojs(databaseurl);
 
@@ -36,10 +38,10 @@ function matchCriteria(startDate, endDate, frequency, key, type)
     var hh = matchField.getHours();
     if (hh<10) {  hh='0'+hh};
 
-    var hourKey = yyyy + mm + dd + hh;
-    var dayKey = yyyy + mm + dd;
-    var weekKey = weekyyyy + weekmm + weekdd;
-    var monthKey = yyyy + mm;
+    var hourKey = '' + yyyy + mm + dd + hh;
+    var dayKey = '' + yyyy + mm + dd;
+    var weekKey = '' + weekyyyy + weekmm + weekdd;
+    var monthKey = '' + yyyy + mm;
 
     if (frequency == 'Hour') {
       increment = (60*60);
@@ -92,10 +94,10 @@ function projectCriteria(startDate, endDate, frequency, projectQuery)
     var hh = matchField.getHours();
     if (hh<10) {  hh='0'+hh};
 
-    var hourKey = yyyy + mm + dd + hh;
-    var dayKey = yyyy + mm + dd;
-    var weekKey = weekyyyy + weekmm + weekdd;
-    var monthKey = yyyy + mm;
+    var hourKey = '' + yyyy + mm + dd + hh;
+    var dayKey = '' + yyyy + mm + dd;
+    var weekKey = '' + weekyyyy + weekmm + weekdd;
+    var monthKey = '' + yyyy + mm;
 
     if (frequency == 'Day') {
       increment = (60*60*24);
@@ -434,11 +436,11 @@ module.exports.sessionduration = function(req,res){
 
 }
 
-module.exports.userretention = function(req,res){
+module.exports.returninguserretention = function(req,res){
 
  var start,end,selectedfrequency,istest;
  var data;
-  console.log("userretentioncode is called");
+  console.log("returninguserretention code is called");
   start = parseInt(req.query["param1"])/1000;
   end = parseInt(req.query["param2"])/1000;
   selectedfrequency = req.query["param3"];
@@ -497,24 +499,138 @@ module.exports.userretention = function(req,res){
                   { _id: { key: '20150919', type: 'Week', user: 'Returning' },
                     value: [ {20150919: 4} ] }
                  ]
-            // data = [ 
-            //           {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-            //           {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-            //           {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-            //           {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
-            //        ];
         }
         else 
         {
-            // data = [ 
-            //           {"20140902":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-            //           {"20140909":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-            //           {"20140916":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-            //           {"20140923":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389"}}
-            //  ];
+
         }
 
         return res.json(data);
     }
+
+}
+
+module.exports.newuserretention = function(req,res){
+
+ var start,end,selectedfrequency,istest;
+ var data;
+  console.log("newuserretention code  is called");
+  start = parseInt(req.query["param1"])/1000;
+  end = parseInt(req.query["param2"])/1000;
+  selectedfrequency = req.query["param3"];
+  istest = req.query["param4"];
+  console.log("istest value:" + istest);
+
+
+  if(istest == 0)
+  {
+    var key = {};
+    var type = {};
+    var user = {};
+    var projectQuery = {};
+
+    db5 = mongojs(databaseurl);
+    user['_id.user'] = 'New';
+  //  start = 1420204195 + (86400*150);
+   // end = start + (86400*30);
+   // selectedfrequency = 'Day';
+
+    matchCriteria(start,end,selectedfrequency,key,type);
+    projectCriteria(start,end,selectedfrequency,projectQuery);
+
+
+          db5.collection('agg_retention_data').find
+            ({$and : [key,type,user]}
+             ,projectQuery
+            ).sort({ '_id.key' : 1}
+               ,function (err , result) {
+                  if (err || !result) {
+                      console.log(err);
+                      db5.close();
+                      return;} //end of function
+                    data = result;
+                  console.log(result);
+                  db5.close();
+                  return res.json(result);
+              });
+
+    console.log("database is called");
+    console.log(data);
+    }
+    else
+    {
+        if((selectedfrequency == "Day") || (selectedfrequency == "Week"))
+        {
+          data = [ 
+                  { _id: { key: '20150822', type: 'Week', user: 'Returning' },
+                    value: [ {20150822: 10, 20150829: 8, 20150905: 7, 20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150829', type: 'Week', user: 'Returning' },
+                    value: [ {20150829: 8, 20150905: 7, 20150912: 5, 20150919: 4} ]  },
+                  { _id: { key: '20150905', type: 'Week', user: 'Returning' },
+                    value: [ {20150905: 7, 20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150912', type: 'Week', user: 'Returning' },
+                    value: [ {20150912: 5, 20150919: 4} ] },
+                  { _id: { key: '20150919', type: 'Week', user: 'Returning' },
+                    value: [ {20150919: 4} ] }
+                 ]
+        }
+        else 
+        {
+
+        }
+
+        return res.json(data);
+    }
+
+}
+
+module.exports.ticker = function(req,res){
+
+ var data;
+  console.log("ticker is called");
+  var startDateEpoch = parseInt(req.query["param1"])/1000;
+  var currentTime = new Date();
+  var currentTimeEpoch = Math.round(currentTime.getTime()/1000);
+
+  var resultSet = [];
+
+
+  db6 = mongojs(databaseurl);
+
+  db6.collection('real_time_data').find
+  ().sort({ '_id' : 1}
+   ,function (err , result) {
+     if (err || !result) {
+              console.log(err);
+              db6.close();
+              return;}
+
+     db6.close();
+     //returnresult(result);
+     var arrayItem = {};
+
+      for (var i=0; i<result.length; i++){
+        if (i !=0) result[i].count = result[i-1].count + result[i].count;
+        arrayItem[result[i]._id] = result[i].count;
+      }
+
+      //console.log(arrayItem);
+
+      for (var i=startDateEpoch; i<=currentTimeEpoch; i = i+15){
+        if (i == startDateEpoch) {
+          if (!arrayItem[i]) arrayItem[i] = 0;
+        }
+        else {
+          if (!arrayItem[i]) arrayItem[i] = arrayItem[i-15];
+        }
+        resultSet.push({'_id' : i*1000, 'count' : arrayItem[i]});
+
+      }
+
+        return res.json(resultSet);
+
+  });
+
+
 
 }

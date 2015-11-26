@@ -18,7 +18,7 @@ nameApp.controller('DevicePieChartCtrl', ['$scope','analyticsService',function (
               // }
           }, cb);
 
-          cb(moment().subtract(6, 'month').startOf('day'), moment().endOf('day'),"Week");
+          cb(moment().subtract(12, 'month').startOf('day'), moment().endOf('day'),"Week");
 
           function cb(start, end, freq) {
             if(freq==undefined)

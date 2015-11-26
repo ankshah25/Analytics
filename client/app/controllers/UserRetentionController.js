@@ -71,7 +71,6 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
                 }
     };
 
-  $scope.alreadyretentionchartloaded=false;
 
   $scope.UpdateRetention = function()
   {
@@ -79,26 +78,30 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
       // $scope.enddate=end;
       // $scope.selectedfrequency=freq;
 
-   var UserRetentionPromise  = analyticsService.getUserRetentionData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
-   UserRetentionPromise.then(function(response){
+   var ReturningUserRetentionPromise  = analyticsService.getReturningUserRetentionData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+   ReturningUserRetentionPromise.then(function(response){
 
       data1 = response.data;
       console.log(data1);
+  
+      updateuserretentionchart("returningUserRetentionChart",data1);
 
-      // data2=[ 
-      //                 {"20140901":{"totnumberofusers":"628","Less 1 week":"500","1 week":"402","2 week":"300","3 week":"25"}},
-      //                 {"20140908":{"totnumberofusers":"728","Less 1 week":"515","1 week":"412","2 week":"313","3 week":"88"}},
-      //                 {"20140915":{"totnumberofusers":"828","Less 1 week":"534","1 week":"434","2 week":"329","3 week":"89"}},
-      //                 {"20140922":{"totnumberofusers":"928","Less 1 week":"589","1 week":"467","2 week":"389","3 week":"101"}}
-      //              ];
-      //      console.log(data2);        
-      updateuserretentionchart1("userRetentionchart",data1);
+	   var NewUserRetentionPromise  = analyticsService.getNewUserRetentionData($scope.startdate,$scope.enddate,$scope.selectedfrequency);
+	   NewUserRetentionPromise.then(function(response1){
 
-      $scope.alreadyretentionchartloaded = true; 
+	      data2 = response1.data;
+	      console.log(data2);
+	        
+	      updateuserretentionchart("newUserRetentionChart",data2);
+
+	     })
+
      })
+
+
   }
 
-	function updateuserretentionchart1(tableId,data)
+	function updateuserretentionchart(tableId,data)
 	{
 		// console.log(data[0]["_id"]["key"]);
 		// console.log(data[0]._id.key);
@@ -134,14 +137,15 @@ nameApp.controller('UserRetentionChartCtrl', ['$scope','analyticsService',functi
 	      {
 	      	i++;
 	      	newcell = row.insertCell(i);
-	      	if($scope.selectedfrequency=="Month")
-	   	    {
-               newcell.innerHTML ='<h4> &nbsp;'+moment(key, 'YYYYMM').format('MMM YYYY')+'&nbsp;</h4>';
-	   	    }
-			else
-			{
-				newcell.innerHTML ='<h4> &nbsp;'+moment(key, 'YYYYMMDD').format('DD MMM YYYY')+'&nbsp;</h4>';
-			}
+	      	newcell.innerHTML ='<h4> '+$scope.selectedfrequency+ ' ' +(i-1)+'</h4>';
+	  //     	if($scope.selectedfrequency=="Month")
+	  //  	    {
+   //             newcell.innerHTML ='<h4> &nbsp;&nbsp;&nbsp;'+moment(key, 'YYYYMM').format('MMM YYYY')+'&nbsp;&nbsp;&nbsp;</h4>';
+	  //  	    }
+			// else
+			// {
+			// 	newcell.innerHTML ='<h4> &nbsp;&nbsp;&nbsp;'+moment(key, 'YYYYMMDD').format('DD MMM YYYY')+'&nbsp;&nbsp;&nbsp;</h4>';
+			// }
               //newcell.innerHTML ='<h4> &nbsp;'+key+'&nbsp;</h4>';
               newcell.className = 'headercolumn';
 	      	  //console.log(key);

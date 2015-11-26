@@ -1,5 +1,5 @@
 //Set the connection details
-var databaseurl = 'test';
+var databaseurl = '192.168.1.37:27017/test';
 var mongojs= require('mongojs');
 var db = mongojs(databaseurl);
 
@@ -36,10 +36,10 @@ function matchCriteria(startDate, endDate, frequency, key, type)
     var hh = matchField.getHours();
     if (hh<10) {  hh='0'+hh};
 
-    var hourKey = yyyy + mm + dd + hh;
-    var dayKey = yyyy + mm + dd;
-    var weekKey = weekyyyy + weekmm + weekdd;
-    var monthKey = yyyy + mm;
+    var hourKey = '' + yyyy + mm + dd + hh;
+    var dayKey = '' + yyyy + mm + dd;
+    var weekKey = '' + weekyyyy + weekmm + weekdd;
+    var monthKey = '' + yyyy + mm;
 
     if (frequency == 'Hour') {
       increment = (60*60);
@@ -93,10 +93,10 @@ function projectCriteria(startDate, endDate, frequency, projectQuery)
     var hh = matchField.getHours();
     if (hh<10) {  hh='0'+hh};
 
-    var hourKey = yyyy + mm + dd + hh;
-    var dayKey = yyyy + mm + dd;
-    var weekKey = weekyyyy + weekmm + weekdd;
-    var monthKey = yyyy + mm;
+    var hourKey = '' + yyyy + mm + dd + hh;
+    var dayKey = '' + yyyy + mm + dd;
+    var weekKey = '' + weekyyyy + weekmm + weekdd;
+    var monthKey = '' + yyyy + mm;
 
     if (frequency == 'Day') {
       increment = (60*60*24);
@@ -143,6 +143,9 @@ function getSessionDuration() {
   var type = {};
 
   matchCriteria(startDate,endDate,frequency,key,type);
+
+  //console.log(key);
+  //console.log(type);
 
   db.collection('agg_session_data').aggregate(
      {$match : {$and : [key,type]}}
@@ -250,8 +253,8 @@ function getRetentionData() {
 } //end of function getRetentionData
 
 
-var startDate = 1420204195 + (86400*150);
-var endDate = startDate + (86400*90);
+var startDate = 1448044200 - (86400*30);
+var endDate   = 1448130599 - 86400;
 var frequency = 'Day';
 
 //getSessionCounts();

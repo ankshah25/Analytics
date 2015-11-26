@@ -34,7 +34,11 @@ app.get('/database/sessioncounts', databasecontroller.sessioncounts);
 
 app.get('/database/sessionduration', databasecontroller.sessionduration);
 
-app.get('/database/userretention', databasecontroller.userretention);
+app.get('/database/returninguserretention', databasecontroller.returninguserretention);
+
+app.get('/database/newuserretention', databasecontroller.newuserretention);
+
+app.get('/database/ticker', databasecontroller.ticker);
 
 app.get('/database/devicepiecharts', devicepiechartcontroller.devicepiecharts);
 

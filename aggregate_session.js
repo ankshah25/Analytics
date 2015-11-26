@@ -4,8 +4,8 @@ var mongojs= require('mongojs');
 var db = mongojs(databaseurl);
 
 //To be incremented daily
-var startDate = new Date(2015, 5, 01);
-var endDate = new Date(2015, 5, 30);
+var startDate = new Date(2015, 0, 01);
+var endDate = new Date(2015, 10, 21);
 
 var prevSessionHour = '';
 var prevSessionday = '';
@@ -43,9 +43,9 @@ for (var dt = startDate;
   if(weekmm<10) {   weekmm='0'+weekmm};
 
   //Derive Day, Week and Month Key values
-  var dayKey = yyyy + mm + dd;
-  var weekKey = weekyyyy + weekmm + weekdd;
-  var monthKey = yyyy + mm;
+  var dayKey = '' + yyyy + mm + dd;
+  var weekKey = '' + weekyyyy + weekmm + weekdd;
+  var monthKey = '' + yyyy + mm;
 
   //Derive columns to be apply aggregate functions
   var sessionDay = 'SD' + dayKey;
@@ -86,8 +86,9 @@ for (var dt = startDate;
    var hh = hour;
    if (hh<10) {  hh='0'+hh};
 
-   var hourKey = yyyy + mm + dd + hh;
+   var hourKey = '' + yyyy + mm + dd + hh;
    var sessionHour = 'SH'+ hourKey;
+   var durationHour = 'DH' + hourKey;
 
    var aggHourQuery = {};
 
@@ -107,8 +108,8 @@ for (var dt = startDate;
    aggHourQuery['Non_Unique_User_Count'] = sumQuery;
    var sumQuery = {$sum : {$cond: [{$gt: ['$' + sessionHour, 0]},1,0]}};
    aggHourQuery['Unique_User_Count'] = sumQuery;
-//   var sumQuery = {$sum : '$' + durationHour};
-//   aggHourQuery['Total_Time_Spent'] = sumQuery;
+   var sumQuery = {$sum : '$' + durationHour};
+   aggHourQuery['Total_Time_Spent'] = sumQuery;
 
    var sumQuery = {$sum :
                            {$cond: [{
@@ -123,6 +124,8 @@ for (var dt = startDate;
 
    connectionCount++;
 
+   //console.log(aggHourQuery);
+
    //Execute Aggregate query for Hour
    db.collection('user_hourly_session_info').aggregate
      ({$group: aggHourQuery}
@@ -134,6 +137,7 @@ for (var dt = startDate;
 
           //console.log(result);
           updateAggregate('Hour', result[0]['_id']['key'], result);
+          //console.log(result);
       });
     } //End of for loop for hourly aggregate
 
