@@ -11,7 +11,7 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
  
       console.log(start,end,selectedfrequency);
        //var data;
-       return $http.get("/database/sessioncounts",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":0}})
+       return $http.get("/database/sessioncounts",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":1}})
         .success(function(response){
               console.log("I got the data for sessioncounts");
               console.log(response);
@@ -41,6 +41,24 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
 
 };
 
+
+
+     this.getEventsComparisionData = function(start,end,selectedfrequency,selectedevents) {
+
+      console.log(start,end,selectedfrequency,selectedevents);
+       //var data;
+       return $http.get("/database/eventscomparisiondata",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":1}})
+        .success(function(response){
+              console.log("I got the data for geteventscomparisiondata");
+              console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+};
 
      this.getSessionDuration = function(start,end,selectedfrequency) {
 
@@ -226,5 +244,40 @@ nameApp.service('analyticsService', ['$http', function ($http,$rootScope) {
       });
 
      };
+
+
+    this.getEventsData = function(start,end,selectedfrequency) {
+
+      console.log(start,end,selectedfrequency);
+       //var data;
+       return $http.get("/database/eventsdata",{params:{"param1": start, "param2": end,"param3": selectedfrequency,"param4":1}})
+        .success(function(response){
+              console.log("I got the data for eventsdata");
+              console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+    };
+
+  this.loadevents = function() {
+
+      console.log();
+       //var data;
+       return $http.get("/database/events",{params:{"param4":1}})
+        .success(function(response){
+              console.log("I got the data for loadevents");
+              //console.log(response);
+              return response;
+             // return response;
+        }).error(function(){
+         alert("error");
+         return null ;
+      });
+
+    };
 
     }]);

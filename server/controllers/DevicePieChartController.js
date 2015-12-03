@@ -1,6 +1,6 @@
 //Set the connection details
 //var databaseurl = 'test';
-var databaseurl = '169.254.41.202:27017/test';
+var databaseurl = 'test';
 var mongojs= require('mongojs');
 var resultSet = [];
 

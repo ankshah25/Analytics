@@ -129,94 +129,94 @@ module.exports.usersplit = function(req,res){
   {
     db1 = mongojs(databaseurl);
   //  start = 1420204195 + (86400*150);
-	 // end = start + (86400*30);
-	 // selectedfrequency = 'Day';
+   // end = start + (86400*30);
+   // selectedfrequency = 'Day';
 
-	  matchCriteria(start,end,selectedfrequency,key,type);
+    matchCriteria(start,end,selectedfrequency,key,type);
 
-	  db1.collection('agg_session_data').aggregate(
-	     {$match : {$and : [key,type]}}
-	     ,{$unwind : '$value'}
-	     ,{$group : {'_id' : '$value._id.key'
-	                 ,'New_User_Count' : {$sum : '$value.New_User_Count'}
-	                 ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}
-	                 
-	                }}
-	    ,{$sort : {'_id' : 1}}
-	           ,function (err , result) {
-	              if (err || !result) {
-	                  console.log(err);
-	                  db1.close();
-	                  return;} //end of function
+    db1.collection('agg_session_data').aggregate(
+       {$match : {$and : [key,type]}}
+       ,{$unwind : '$value'}
+       ,{$group : {'_id' : '$value._id.key'
+                   ,'New_User_Count' : {$sum : '$value.New_User_Count'}
+                   ,'Unique_User_Count' : {$sum : '$value.Unique_User_Count'}
+                   
+                  }}
+      ,{$sort : {'_id' : 1}}
+             ,function (err , result) {
+                if (err || !result) {
+                    console.log(err);
+                    db1.close();
+                    return;} //end of function
                   data = result;
-	              console.log(result);
-	              db1.close();
-	              return res.json(result);
-	          });
+                console.log(result);
+                db1.close();
+                return res.json(result);
+            });
 
-	  // console.log("database is called");
-	  // console.log(data);
+    // console.log("database is called");
+    // console.log(data);
     }
     else
     {
-	   if(selectedfrequency == "Day")
-	      {
-	        data = [ 
-	            {_id:"20151001",New_User_Count:"628",Unique_User_Count:"33"},
-	            {_id:"20151002",New_User_Count:"530",Unique_User_Count:"27"},
-	            {_id:"20151003",New_User_Count:"456",Unique_User_Count:"31"},
-	            {_id:"20151004",New_User_Count:"312",Unique_User_Count:"29"},
-	            {_id:"20151005",New_User_Count:"567",Unique_User_Count:"19"},
-	            {_id:"20151006",New_User_Count:"413",Unique_User_Count:"13"},
-	            {_id:"20151007",New_User_Count:"300",Unique_User_Count:"18"}
-	         ];
-	       }
+     if(selectedfrequency == "Day")
+        {
+          data = [ 
+              {_id:"20151001",New_User_Count:"628",Unique_User_Count:"33"},
+              {_id:"20151002",New_User_Count:"530",Unique_User_Count:"27"},
+              {_id:"20151003",New_User_Count:"456",Unique_User_Count:"31"},
+              {_id:"20151004",New_User_Count:"312",Unique_User_Count:"29"},
+              {_id:"20151005",New_User_Count:"567",Unique_User_Count:"19"},
+              {_id:"20151006",New_User_Count:"413",Unique_User_Count:"13"},
+              {_id:"20151007",New_User_Count:"300",Unique_User_Count:"18"}
+           ];
+         }
 
-	      if(selectedfrequency == "Month")
-	      {
-	        data = [ 
-	            {_id:"201410",New_User_Count:"628",Unique_User_Count:"33"},
-	            {_id:"201412",New_User_Count:"530",Unique_User_Count:"27"},
-	            {_id:"201502",New_User_Count:"456",Unique_User_Count:"31"},
-	            {_id:"201504",New_User_Count:"312",Unique_User_Count:"29"},
-	            {_id:"201508",New_User_Count:"567",Unique_User_Count:"19"},
-	            {_id:"201509",New_User_Count:"413",Unique_User_Count:"13"},
-	            {_id:"201510",New_User_Count:"300",Unique_User_Count:"18"}
-	         ];
-	       }
+        if(selectedfrequency == "Month")
+        {
+          data = [ 
+              {_id:"201410",New_User_Count:"628",Unique_User_Count:"33"},
+              {_id:"201412",New_User_Count:"530",Unique_User_Count:"27"},
+              {_id:"201502",New_User_Count:"456",Unique_User_Count:"31"},
+              {_id:"201504",New_User_Count:"312",Unique_User_Count:"29"},
+              {_id:"201508",New_User_Count:"567",Unique_User_Count:"19"},
+              {_id:"201509",New_User_Count:"413",Unique_User_Count:"13"},
+              {_id:"201510",New_User_Count:"300",Unique_User_Count:"18"}
+           ];
+         }
 
-	      if(selectedfrequency == "Week")
-	      {
-	        data = [ 
-	              {_id:"20150906",New_User_Count:"500",Unique_User_Count:"24"},
-	              {_id:"20150913",New_User_Count:"530",Unique_User_Count:"27"},
-	              {_id:"20150920",New_User_Count:"412",Unique_User_Count:"27"},
-	              {_id:"20150927",New_User_Count:"456",Unique_User_Count:"31"},
-	              {_id:"20151004",New_User_Count:"628",Unique_User_Count:"33"},
-	              {_id:"20151011",New_User_Count:"312",Unique_User_Count:"29"},
-	              {_id:"20151018",New_User_Count:"567",Unique_User_Count:"19"},
-	              {_id:"20151025",New_User_Count:"300",Unique_User_Count:"10"},
-	              {_id:"20151101",New_User_Count:"413",Unique_User_Count:"13"}
-	           ];
-	      }
+        if(selectedfrequency == "Week")
+        {
+          data = [ 
+                {_id:"20150906",New_User_Count:"500",Unique_User_Count:"24"},
+                {_id:"20150913",New_User_Count:"530",Unique_User_Count:"27"},
+                {_id:"20150920",New_User_Count:"412",Unique_User_Count:"27"},
+                {_id:"20150927",New_User_Count:"456",Unique_User_Count:"31"},
+                {_id:"20151004",New_User_Count:"628",Unique_User_Count:"33"},
+                {_id:"20151011",New_User_Count:"312",Unique_User_Count:"29"},
+                {_id:"20151018",New_User_Count:"567",Unique_User_Count:"19"},
+                {_id:"20151025",New_User_Count:"300",Unique_User_Count:"10"},
+                {_id:"20151101",New_User_Count:"413",Unique_User_Count:"13"}
+             ];
+        }
 
-	      if(selectedfrequency == "Hour")
-	      {
-	        data = [ 
-	              {_id:"2015100700",New_User_Count:"500",Unique_User_Count:"24"},
-	              {_id:"2015100701",New_User_Count:"530",Unique_User_Count:"27"},
-	              {_id:"2015100703",New_User_Count:"456",Unique_User_Count:"31"},
-	              {_id:"2015100704",New_User_Count:"628",Unique_User_Count:"33"},
-	              {_id:"2015100707",New_User_Count:"312",Unique_User_Count:"29"},
-	              {_id:"2015100708",New_User_Count:"567",Unique_User_Count:"19"},
-	              {_id:"2015100709",New_User_Count:"300",Unique_User_Count:"10"},
-	              {_id:"2015100712",New_User_Count:"413",Unique_User_Count:"13"},
-	              {_id:"2015100718",New_User_Count:"300",Unique_User_Count:"18"},
-	              {_id:"2015100719",New_User_Count:"234",Unique_User_Count:"45"}
-	           ];
-	      }
-	      return res.json(data);
-	  }
+        if(selectedfrequency == "Hour")
+        {
+          data = [ 
+                {_id:"2015100700",New_User_Count:"500",Unique_User_Count:"24"},
+                {_id:"2015100701",New_User_Count:"530",Unique_User_Count:"27"},
+                {_id:"2015100703",New_User_Count:"456",Unique_User_Count:"31"},
+                {_id:"2015100704",New_User_Count:"628",Unique_User_Count:"33"},
+                {_id:"2015100707",New_User_Count:"312",Unique_User_Count:"29"},
+                {_id:"2015100708",New_User_Count:"567",Unique_User_Count:"19"},
+                {_id:"2015100709",New_User_Count:"300",Unique_User_Count:"10"},
+                {_id:"2015100712",New_User_Count:"413",Unique_User_Count:"13"},
+                {_id:"2015100718",New_User_Count:"300",Unique_User_Count:"18"},
+                {_id:"2015100719",New_User_Count:"234",Unique_User_Count:"45"}
+             ];
+        }
+        return res.json(data);
+    }
 
 }
 

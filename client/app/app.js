@@ -49,6 +49,18 @@ nameApp.config(function ($routeProvider) {
             templateUrl: '/app/views/userretention.html'
             
         })
+        .when('/events',
+        {
+            //controller: 'DashboardPageCtrl',
+            templateUrl: '/app/views/events.html'
+            
+        })
+        .when('/eventscompare',
+        {
+            //controller: 'DashboardPageCtrl',
+            templateUrl: '/app/views/eventscompare.html'
+            
+        })
         // .when('/analytics/device',
         // {
         //     //controller: 'DashboardPageCtrl',

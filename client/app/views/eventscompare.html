@@ -1,0 +1,84 @@
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+</style>
+      <div class="col-xs-12 col-md-12" style="margin-left:100px">
+           </br></br></br>
+          <div class="container-fluid" class="no-margin" class="no-padding">
+
+             <div ng-controller="EventsCompareCtrl" class="col-xs-12 col-md-12" id="doubleChartEventsCompare" data-ng-init="init()">
+                       <div id="reportrange" class="pull-left" style="background: #fff;padding: 5px 10px;cursor: pointer; width: 30%">
+                           <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                           <span></span>
+
+                       </div>
+                       <button type="button" id="btntoday" class="btn btn-primary">Today</button>
+                       <button type="button" id="btnyesterday" class="btn btn-primary">Yesterday</button>
+                       <button type="button" id="btncurrmonth" class="btn btn-primary">Current Month</button>
+                       <button type="button" id="btnprevmonth" class="btn btn-primary">Previous Month</button>
+                       <button type="button" id="btn3mnths" class="btn btn-primary">3 months</button>
+                       <button type="button" id="btn6mnths" class="btn btn-primary">6 months</button>
+                       <button type="button" id="btn1year" class="btn btn-primary">1 year</button>
+                      </br></br></br></br>
+
+                      <table style='width:550px;height:200px'>
+                        <tr>
+                            <td style='width:200px;height: 150px;'>
+                               <b>Events Selector:</b><br/>
+<!--                                <select multiple="multiple" id='lstBox1'>
+                                  <option value="ajax">Ajax</option>
+                                  <option value="jquery">jQuery</option>
+                                  <option value="javascript">JavaScript</option>
+                                  <option value="mootool">MooTools</option>
+                                  <option value="prototype">Prototype</option>
+                                  <option value="dojo">Dojo</option>
+                              </select> -->
+                              <!-- <select id="EventsSelector" style="width: 20%;height: 150px;" multiple="multiple"> -->
+                              <select id="EventsSelector" style="height: 150px;" multiple="multiple">
+                                  <option ng-repeat="event in eventsdata" value="{{event}}">{{event}}</option>
+                              </select>
+                            </td>
+
+                        <td style='width:150px;height: 150px;text-align:center;vertical-align:middle;'>
+                            <input type='button' id='btnRight' value ='  >  '/>
+                            <br/><input type='button' id='btnLeft' value ='  <  '/>
+                        </td>
+
+                        <td style='width:200px;height: 150px;'>
+                            <b>Events Compared: </b><br/>
+                            <select multiple="multiple" style="height: 150px;" id="ComparedEvents">
+                            </select>
+                        </td>
+                    </tr>
+                    </table>
+                   <button type="button" id="btnCompare" class="btn btn-primary">Compare</button>
+                       <div id="divNonUniqueChart">
+                      </div>
+                      <div id="divUniqueChart">
+                      </div>
+
+             </div>
+          </div>
+      </div><!-- col-xs-10 col-md-10 -->
+
